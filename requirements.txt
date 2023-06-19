@@ -1,0 +1,7 @@
+autopep8==2.0.2
+pydocstyle==6.3.0
+pycodestyle==2.10.0
+sqlalchemy==2.0.15
+sqlalchemy-utils==0.41.1
+psycopg2==2.9.6
+pyargon2==1.0.7
