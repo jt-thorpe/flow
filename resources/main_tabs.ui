@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QFrame" name="frame">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>800</width>
+      <height>600</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>800</width>
+      <height>600</height>
+     </size>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QTabWidget" name="tab_bar">
+       <property name="minimumSize">
+        <size>
+         <width>800</width>
+         <height>600</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QTabBar::tab { height: 50px; width: 125px;}
+QTabWidget::tab-bar {alignment: center;}</string>
+       </property>
+       <property name="currentIndex">
+        <number>2</number>
+       </property>
+       <widget class="QWidget" name="income_tab">
+        <attribute name="title">
+         <string>Income</string>
+        </attribute>
+        <widget class="QListWidget" name="income_list">
+         <property name="geometry">
+          <rect>
+           <x>15</x>
+           <y>20</y>
+           <width>201</width>
+           <height>511</height>
+          </rect>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="income_input">
+         <property name="geometry">
+          <rect>
+           <x>270</x>
+           <y>30</y>
+           <width>113</width>
+           <height>25</height>
+          </rect>
+         </property>
+         <property name="placeholderText">
+          <string>Enter income</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="add_income_btn">
+         <property name="geometry">
+          <rect>
+           <x>270</x>
+           <y>200</y>
+           <width>80</width>
+           <height>25</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Add Income</string>
+         </property>
+        </widget>
+        <widget class="QTextEdit" name="income_desc">
+         <property name="geometry">
+          <rect>
+           <x>270</x>
+           <y>70</y>
+           <width>271</width>
+           <height>111</height>
+          </rect>
+         </property>
+         <property name="placeholderText">
+          <string>Add an optional description of the income</string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="dashboard_tab">
+        <attribute name="title">
+         <string>Dashboard</string>
+        </attribute>
+       </widget>
+       <widget class="QWidget" name="expense_tab">
+        <attribute name="title">
+         <string>Expense</string>
+        </attribute>
+        <widget class="QListWidget" name="expense_list">
+         <property name="geometry">
+          <rect>
+           <x>570</x>
+           <y>20</y>
+           <width>201</width>
+           <height>511</height>
+          </rect>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="expense_input">
+         <property name="geometry">
+          <rect>
+           <x>440</x>
+           <y>20</y>
+           <width>113</width>
+           <height>25</height>
+          </rect>
+         </property>
+         <property name="placeholderText">
+          <string>Enter expense</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="add_expense_btn">
+         <property name="geometry">
+          <rect>
+           <x>470</x>
+           <y>190</y>
+           <width>80</width>
+           <height>25</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Add Expense</string>
+         </property>
+        </widget>
+        <widget class="QTextEdit" name="expense_desc">
+         <property name="geometry">
+          <rect>
+           <x>280</x>
+           <y>60</y>
+           <width>271</width>
+           <height>111</height>
+          </rect>
+         </property>
+         <property name="placeholderText">
+          <string>Add an optional description of the expense</string>
+         </property>
+        </widget>
+       </widget>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
