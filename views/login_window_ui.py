@@ -9,7 +9,7 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 
 
-class Ui_login_window(object):
+class Ui_LoginWindow(object):
     def setupUi(self, login_window):
         login_window.setObjectName("login_window")
         login_window.resize(400, 473)
@@ -25,7 +25,8 @@ class Ui_login_window(object):
         self.infinity_logo.setText("")
         self.infinity_logo.setPixmap(QtGui.QPixmap("img/infinity_256x256.png"))
         self.infinity_logo.setObjectName("infinity_logo")
-        self.horizontalLayout_4.addWidget(self.infinity_logo, 0, QtCore.Qt.AlignmentFlag.AlignHCenter)
+        self.horizontalLayout_4.addWidget(
+            self.infinity_logo, 0, QtCore.Qt.AlignmentFlag.AlignHCenter)
         self.verticalLayout.addWidget(self.logo_frame)
         self.email_frame = QtWidgets.QFrame(parent=login_window)
         self.email_frame.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
@@ -44,7 +45,8 @@ class Ui_login_window(object):
         self.hide_email_btn = QtWidgets.QPushButton(parent=self.email_frame)
         self.hide_email_btn.setText("")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("img/hidden_32x32.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        icon.addPixmap(QtGui.QPixmap("img/hidden_32x32.png"),
+                       QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.hide_email_btn.setIcon(icon)
         self.hide_email_btn.setIconSize(QtCore.QSize(24, 24))
         self.hide_email_btn.setCheckable(True)
@@ -66,7 +68,8 @@ class Ui_login_window(object):
         self.password_input.setEchoMode(QtWidgets.QLineEdit.EchoMode.Password)
         self.password_input.setObjectName("password_input")
         self.horizontalLayout_2.addWidget(self.password_input)
-        self.hide_password_btn = QtWidgets.QPushButton(parent=self.password_frame)
+        self.hide_password_btn = QtWidgets.QPushButton(
+            parent=self.password_frame)
         self.hide_password_btn.setText("")
         self.hide_password_btn.setIcon(icon)
         self.hide_password_btn.setIconSize(QtCore.QSize(24, 24))
@@ -94,8 +97,10 @@ class Ui_login_window(object):
     def retranslateUi(self, login_window):
         _translate = QtCore.QCoreApplication.translate
         login_window.setWindowTitle(_translate("login_window", "Form"))
-        self.email_input.setPlaceholderText(_translate("login_window", "Enter your email"))
-        self.password_input.setPlaceholderText(_translate("login_window", "Enter your password"))
+        self.email_input.setPlaceholderText(
+            _translate("login_window", "Enter your email"))
+        self.password_input.setPlaceholderText(
+            _translate("login_window", "Enter your password"))
         self.login_btn.setText(_translate("login_window", "Login"))
         self.exit_btn.setText(_translate("login_window", "Exit"))
 
@@ -104,7 +109,7 @@ if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     login_window = QtWidgets.QWidget()
-    ui = Ui_login_window()
+    ui = Ui_LoginWindow()
     ui.setupUi(login_window)
     login_window.show()
     sys.exit(app.exec())
