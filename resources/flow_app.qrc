@@ -1,0 +1,8 @@
+<RCC>
+  <qresource prefix="/resources/">
+    <file>img/hidden_32x32.png</file>
+    <file>img/infinity_256x256.png</file>
+    <file>img/lock_32x32.png</file>
+    <file>img/mail_32x32.png</file>
+  </qresource>
+</RCC>
