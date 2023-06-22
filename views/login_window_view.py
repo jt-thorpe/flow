@@ -19,14 +19,14 @@ class LoginWindowView(QMainWindow):
         self._ui.setupUi(self)
 
         # Connect signals to slots
-        self._ui.login_button.clicked.connect(self.__login_button_event)
-        self._ui.exit_button.clicked.connect(self.__exit_button_event)
+        self._ui.login_button.clicked.connect(self.__send_login_req_signal)
+        self._ui.exit_button.clicked.connect(self.__send_exit_req_signal)
 
-    def __login_button_event(self):
+    def __send_login_req_signal(self):
         """Emit login_req_signal to controller."""
         self.login_req_signal.emit(True)
 
-    def __exit_button_event(self):
+    def __send_exit_req_signal(self):
         """Emit exit_req_signal to controller."""
         self.exit_req_signal.emit(True)
 

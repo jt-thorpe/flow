@@ -2,9 +2,6 @@ import sys
 
 from PyQt6.QtCore import QObject, pyqtSlot
 
-from models.flow_app_model import FlowModel
-from views.login_window_view import LoginWindowView
-
 
 class LoginController(QObject):
     """LoginWindow controller.
@@ -21,11 +18,11 @@ class LoginController(QObject):
         self._view = view  # the login view object
 
         # Connect view signals to controller slots
-        self._view.login_req_signal.connect(self.login_request)  # login
-        self._view.exit_req_signal.connect(self.exit_app)  # exit
+        self._view.login_req_signal.connect(self.handle_login_signal)  # login
+        self._view.exit_req_signal.connect(self.handle_exit_signal)  # exit
 
     @pyqtSlot(bool)
-    def login_request(self):
+    def handle_login_signal(self):
         """Handle login request from view."""
         print('Login request received by controller.')
         login_info = self._view.get_login_info()
@@ -33,6 +30,6 @@ class LoginController(QObject):
         self._view.clear_login_info()
 
     @pyqtSlot(bool)
-    def exit_app(self):
+    def handle_exit_signal(self):
         """Exit the application."""
         sys.exit()
