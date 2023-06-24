@@ -37,6 +37,23 @@
       </layout>
      </widget>
     </item>
+    <item alignment="Qt::AlignHCenter">
+     <widget class="QLabel" name="login_fail_message">
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+        <bold>true</bold>
+        <underline>false</underline>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QLabel {color: red;}</string>
+      </property>
+      <property name="text">
+       <string>Login unsucessful: please try again</string>
+      </property>
+     </widget>
+    </item>
     <item>
      <widget class="QFrame" name="email_frame">
       <property name="frameShape">
