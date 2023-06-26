@@ -16,6 +16,7 @@ class LoginController(QObject):
 
     authentication_request_signal = pyqtSignal(tuple)  # sent to model
     controller_auth_res_signal = pyqtSignal(bool)  # sent to view
+    proceed_to_main_signal = pyqtSignal(bool)  # sent to app
 
     def __init__(self, model, view):
         """Initialize LoginWindow controller."""
@@ -72,3 +73,5 @@ class LoginController(QObject):
             login_result (bool): True if login successful, False otherwise
         """
         self.controller_auth_res_signal.emit(login_result)
+        if login_result:
+            self.proceed_to_main_signal.emit(True)

@@ -9,7 +9,7 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 
 
-class Ui_MainWindow(object):
+class Ui_main_tabs_window(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(800, 600)
@@ -28,7 +28,7 @@ class Ui_MainWindow(object):
         self.tab_bar = QtWidgets.QTabWidget(parent=self.frame)
         self.tab_bar.setMinimumSize(QtCore.QSize(800, 600))
         self.tab_bar.setStyleSheet("QTabBar::tab { height: 50px; width: 125px;}\n"
-"QTabWidget::tab-bar {alignment: center;}")
+                                   "QTabWidget::tab-bar {alignment: center;}")
         self.tab_bar.setObjectName("tab_bar")
         self.income_tab = QtWidgets.QWidget()
         self.income_tab.setObjectName("income_tab")
@@ -73,22 +73,29 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.income_input.setPlaceholderText(_translate("MainWindow", "Enter income"))
+        self.income_input.setPlaceholderText(
+            _translate("MainWindow", "Enter income"))
         self.add_income_btn.setText(_translate("MainWindow", "Add Income"))
-        self.income_desc.setPlaceholderText(_translate("MainWindow", "Add an optional description of the income"))
-        self.tab_bar.setTabText(self.tab_bar.indexOf(self.income_tab), _translate("MainWindow", "Income"))
-        self.tab_bar.setTabText(self.tab_bar.indexOf(self.dashboard_tab), _translate("MainWindow", "Dashboard"))
-        self.expense_input.setPlaceholderText(_translate("MainWindow", "Enter expense"))
+        self.income_desc.setPlaceholderText(_translate(
+            "MainWindow", "Add an optional description of the income"))
+        self.tab_bar.setTabText(self.tab_bar.indexOf(
+            self.income_tab), _translate("MainWindow", "Income"))
+        self.tab_bar.setTabText(self.tab_bar.indexOf(
+            self.dashboard_tab), _translate("MainWindow", "Dashboard"))
+        self.expense_input.setPlaceholderText(
+            _translate("MainWindow", "Enter expense"))
         self.add_expense_btn.setText(_translate("MainWindow", "Add Expense"))
-        self.expense_desc.setPlaceholderText(_translate("MainWindow", "Add an optional description of the expense"))
-        self.tab_bar.setTabText(self.tab_bar.indexOf(self.expense_tab), _translate("MainWindow", "Expense"))
+        self.expense_desc.setPlaceholderText(_translate(
+            "MainWindow", "Add an optional description of the expense"))
+        self.tab_bar.setTabText(self.tab_bar.indexOf(
+            self.expense_tab), _translate("MainWindow", "Expense"))
 
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
+    ui = Ui_main_tabs_window()
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec())

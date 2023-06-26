@@ -54,7 +54,7 @@ class FlowModel(QObject):
         Returns:
             bool: True if authenticated, False otherwise
         """
-        return self._authenticated
+        return self._is_authenticated
 
     @pyqtSlot(tuple)
     def authenticate_user(self, login_request_details):
@@ -94,7 +94,11 @@ class FlowModel(QObject):
                 self.model_auth_signal.emit(True)
             else:
                 # authentication failed
+                self._user_email = None
+                self._is_authenticated = False
                 self.model_auth_signal.emit(False)
         except IndexError:
             # query returned no results i.e. user not found
+            self._user_email = None
+            self._is_authenticated = False
             self.model_auth_signal.emit(False)
