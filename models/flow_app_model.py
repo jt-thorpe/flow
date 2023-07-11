@@ -3,7 +3,8 @@ from PyQt6.QtCore import QObject, pyqtSignal, pyqtSlot
 from sqlalchemy import create_engine, select
 from sqlalchemy.orm import Session
 
-from models.db_table_models import password_table, user_table
+from models.db_table_models import (password_table, transaction_table,
+                                    user_table)
 
 
 class FlowModel(QObject):
@@ -26,8 +27,10 @@ class FlowModel(QObject):
 
         self._engine = create_engine(
             "postgresql://flow_db_master:1pdSftvvtiP0GVQ4eytmMWQL4d0JpFHU@dpg-ci1gki67avjfjanekg50-a.frankfurt-postgres.render.com/flow_test_db_jz1j", echo=True)
-        self._user_email = None
+
+        self._user_email_id = None
         self._is_authenticated = False
+
         self._user_transactions = {
             "income": [],
             "expenses": []
@@ -49,7 +52,7 @@ class FlowModel(QObject):
         Returns:
             str: the user's email or None if not authenticated
         """
-        return self._user_email
+        return self._user_email_id
 
     @property
     def is_authenticated(self):
@@ -59,6 +62,15 @@ class FlowModel(QObject):
             bool: True if authenticated, False otherwise
         """
         return self._is_authenticated
+
+    @property
+    def user_transactions(self):
+        """Return the user's transactions.
+
+        Returns:
+            list: the user's transactions
+        """
+        return self._user_transactions
 
     @pyqtSlot(tuple)
     def authenticate_user(self, login_request_details):
@@ -93,28 +105,19 @@ class FlowModel(QObject):
             # authentication successful
             if (hashed_email == email_query_res[0][1]
                     and hashed_password == pword_query_res[0][1]):
-                self._user_email = login_request_details[0]
+                self._user_email_id = email_query_res[0][0]
                 self._is_authenticated = True
                 self.model_auth_signal.emit(True)
             else:
                 # authentication failed
-                self._user_email = None
+                self._user_email_id = None
                 self._is_authenticated = False
                 self.model_auth_signal.emit(False)
         except IndexError:
             # query returned no results i.e. user not found
-            self._user_email = None
+            self._user_email_id = None
             self._is_authenticated = False
             self.model_auth_signal.emit(False)
-
-    @property
-    def user_transactions(self):
-        """Return the user's transactions.
-
-        Returns:
-            list: the user's transactions
-        """
-        return self._user_transactions
 
     def get_income(self):
         """Return the user's income.
@@ -132,10 +135,26 @@ class FlowModel(QObject):
         """
         return self._user_transactions["expenses"]
 
-    def get_user_transactions(self):
+    @pyqtSlot(bool)
+    def load_user_transactions(self):
         """Return the user's transactions from the database.
 
         Returns:
             list: the user's transactions
         """
-        pass
+        with Session(self._engine) as session, session.begin():
+            # get income and expenses from database
+            get_income_query = select(transaction_table).where(
+                transaction_table.c.user_id == self._user_email_id,
+                transaction_table.c.is_income == True
+            )
+            income_query_res = session.execute(get_income_query).all()
+
+            get_expenses_query = select(transaction_table).where(
+                transaction_table.c.user_id == self._user_email_id,
+                transaction_table.c.is_income == False
+            )
+            expenses_query_res = session.execute(get_expenses_query).all()
+
+        self._user_transactions["income"] = income_query_res
+        self._user_transactions["expenses"] = expenses_query_res
