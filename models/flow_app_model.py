@@ -28,6 +28,10 @@ class FlowModel(QObject):
             "postgresql://flow_db_master:1pdSftvvtiP0GVQ4eytmMWQL4d0JpFHU@dpg-ci1gki67avjfjanekg50-a.frankfurt-postgres.render.com/flow_test_db_jz1j", echo=True)
         self._user_email = None
         self._is_authenticated = False
+        self._user_transactions = {
+            "income": [],
+            "expenses": []
+        }
 
     @property
     def engine(self):
@@ -102,3 +106,36 @@ class FlowModel(QObject):
             self._user_email = None
             self._is_authenticated = False
             self.model_auth_signal.emit(False)
+
+    @property
+    def user_transactions(self):
+        """Return the user's transactions.
+
+        Returns:
+            list: the user's transactions
+        """
+        return self._user_transactions
+
+    def get_income(self):
+        """Return the user's income.
+
+        Returns:
+            list: the user's income
+        """
+        return self._user_transactions["income"]
+
+    def get_expenses(self):
+        """Return the user's expenses.
+
+        Returns:
+            list: the user's expenses
+        """
+        return self._user_transactions["expenses"]
+
+    def get_user_transactions(self):
+        """Return the user's transactions from the database.
+
+        Returns:
+            list: the user's transactions
+        """
+        pass
