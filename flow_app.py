@@ -1,5 +1,4 @@
 import sys
-import time
 
 from PyQt6.QtCore import pyqtSlot
 from PyQt6.QtWidgets import QApplication
@@ -37,12 +36,16 @@ class FlowApp(QApplication):
         Switch to the main window after a successful login signal is received
         from the login controller.
         """
-        time.sleep(3)
         self.login_window_view.close()
+
+        # Load the main window view and controller
         self.main_app_view = MainAppView()
         self.main_view_controller = MainViewController(self.flow_app_model,
                                                        self.main_app_view)
         self.main_app_view.show()
+
+        # notify main view controller that main view has loaded
+        self.main_app_view.notify_view_loaded()
 
 
 if __name__ == '__main__':
