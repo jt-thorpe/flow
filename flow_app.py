@@ -6,6 +6,7 @@ from PyQt6.QtWidgets import QApplication
 
 import flow_app_resources  # nb: doesn't need accessing, just importing
 from controllers.login_controller import LoginController
+from controllers.main_view_controller import MainViewController
 from models.flow_app_model import FlowModel
 from views.login_window_view import LoginWindowView
 from views.main_tabs_view import MainAppView
@@ -20,6 +21,7 @@ class FlowApp(QApplication):
         self.login_window_view = LoginWindowView()
         self.login_controller = LoginController(self.flow_app_model,
                                                 self.login_window_view)
+        self.main_view_controller = None
 
         # connect login sigal to app slot
         self.login_controller.proceed_to_main_signal.connect(
@@ -38,6 +40,8 @@ class FlowApp(QApplication):
         time.sleep(3)
         self.login_window_view.close()
         self.main_app_view = MainAppView()
+        self.main_view_controller = MainViewController(self.flow_app_model,
+                                                       self.main_app_view)
         self.main_app_view.show()
 
 
