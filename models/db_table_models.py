@@ -2,7 +2,7 @@
 
 import uuid
 
-from sqlalchemy import (UUID, VARCHAR, Boolean, Column, DateTime, ForeignKey,
+from sqlalchemy import (UUID, VARCHAR, Boolean, Column, Date, ForeignKey,
                         Integer, MetaData, Table, text)
 from sqlalchemy.dialects.postgresql import UUID
 
@@ -34,6 +34,6 @@ transaction_table = Table(
            ForeignKey("username.id"), primary_key=True, default=uuid.uuid4),
     Column("amount", Integer, nullable=False),
     Column("description", VARCHAR(100)),
-    Column("date", DateTime, server_default=text('NOW()'), nullable=False),
+    Column("date", Date, server_default=text('NOW()'), nullable=False),
     Column("is_income", Boolean, nullable=False)  # True income, False expense
 )
