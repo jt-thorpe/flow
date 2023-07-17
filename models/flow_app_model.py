@@ -20,6 +20,7 @@ class FlowModel(QObject):
     """
 
     model_auth_signal = pyqtSignal(bool)  # sent to controller
+    transactions_loaded_signal = pyqtSignal(dict)
 
     def __init__(self):
         """Initialize Flow model."""
@@ -158,3 +159,10 @@ class FlowModel(QObject):
 
         self._user_transactions["income"] = income_query_res
         self._user_transactions["expenses"] = expenses_query_res
+
+        # if both None, no need to emit signal
+        if income_query_res and expenses_query_res is None:
+            return
+
+        self.transactions_loaded_signal.emit(
+            self._user_transactions)  # emit data to controller

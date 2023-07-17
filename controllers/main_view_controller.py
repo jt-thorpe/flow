@@ -13,6 +13,7 @@ class MainViewController(QObject):
     """
 
     request_load_user_transactions_signal = pyqtSignal(bool)
+    on_transaction_loaded_signal = pyqtSignal(dict)
 
     def __init__(self, model, view):
         """Initialize MainViewController.
@@ -34,6 +35,14 @@ class MainViewController(QObject):
         self.request_load_user_transactions_signal.connect(
             self._model.load_user_transactions)
 
+        # Connect model signals to controller slots
+        self._model.transactions_loaded_signal.connect(
+            self.on_transaction_loaded)
+
+        # Connect controller signals to view slots
+        self.on_transaction_loaded_signal.connect(
+            self._main_view.display_transactions)
+
     @pyqtSlot(bool)
     def on_main_view_loaded(self, loaded):
         """Handle main view loaded signal.
@@ -46,3 +55,16 @@ class MainViewController(QObject):
         """
         if loaded:
             self.request_load_user_transactions_signal.emit(True)
+
+    @pyqtSlot(dict)
+    def on_transaction_loaded(self, data):
+        """Handle transaction loaded signal.
+
+        When a signal from the model is received to confirm the user's
+        transactions have been loaded, signals the view to display the
+        transactions.
+
+        Args:
+            loaded (bool): whether the transactions have been loaded
+        """
+        self.on_transaction_loaded_signal.emit(data)
