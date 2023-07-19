@@ -1,4 +1,4 @@
-from PyQt6.QtCore import pyqtSignal, pyqtSlot
+from PyQt6.QtCore import pyqtSignal, pyqtSlot, Qt
 from PyQt6.QtWidgets import QMainWindow, QTableWidgetItem
 
 from views.main_tabs_ui import Ui_main_tabs_window
@@ -35,7 +35,9 @@ class MainAppView(QMainWindow):
         i = 0
         for item in data["income"]:
             item_amount = QTableWidgetItem(str(item.amount))
+            item_amount.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
             item_date = QTableWidgetItem(str(item.date))
+            item_date.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
             item_description = QTableWidgetItem(item.description)
             self._ui.income_table.setItem(i, 0, item_amount)
             self._ui.income_table.setItem(i, 1, item_date)
@@ -45,7 +47,9 @@ class MainAppView(QMainWindow):
         i = 0
         for item in data["expenses"]:
             item_amount = QTableWidgetItem(str(item.amount))
+            item_amount.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
             item_date = QTableWidgetItem(str(item.date))
+            item_date.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
             item_description = QTableWidgetItem(item.description)
             self._ui.expense_table.setItem(i, 0, item_amount)
             self._ui.expense_table.setItem(i, 1, item_date)

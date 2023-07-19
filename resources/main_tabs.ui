@@ -70,7 +70,7 @@
 QTabWidget::tab-bar {alignment: center;}</string>
        </property>
        <property name="currentIndex">
-        <number>2</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="income_tab">
         <attribute name="title">
@@ -81,52 +81,96 @@ QTabWidget::tab-bar {alignment: center;}</string>
           <rect>
            <x>15</x>
            <y>20</y>
-           <width>330</width>
+           <width>371</width>
            <height>800</height>
           </rect>
+         </property>
+         <property name="sizeAdjustPolicy">
+          <enum>QAbstractScrollArea::AdjustToContents</enum>
          </property>
          <property name="editTriggers">
           <set>QAbstractItemView::NoEditTriggers</set>
          </property>
-        </widget>
-        <widget class="QLineEdit" name="income_input">
-         <property name="geometry">
-          <rect>
-           <x>390</x>
-           <y>80</y>
-           <width>113</width>
-           <height>25</height>
-          </rect>
-         </property>
-         <property name="placeholderText">
-          <string>Enter income</string>
-         </property>
+         <column>
+          <property name="text">
+           <string>Amount</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Date</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Description</string>
+          </property>
+         </column>
         </widget>
         <widget class="QPushButton" name="add_income_btn">
          <property name="geometry">
           <rect>
-           <x>390</x>
-           <y>250</y>
-           <width>80</width>
-           <height>25</height>
+           <x>640</x>
+           <y>240</y>
+           <width>141</width>
+           <height>41</height>
           </rect>
          </property>
          <property name="text">
           <string>Add Income</string>
          </property>
         </widget>
-        <widget class="QTextEdit" name="income_desc">
+        <widget class="QWidget" name="formLayoutWidget">
          <property name="geometry">
           <rect>
-           <x>390</x>
-           <y>120</y>
-           <width>271</width>
-           <height>111</height>
+           <x>410</x>
+           <y>20</y>
+           <width>371</width>
+           <height>211</height>
           </rect>
          </property>
-         <property name="placeholderText">
-          <string>Add an optional description of the income</string>
-         </property>
+         <layout class="QFormLayout" name="add_income_form_layout">
+          <item row="0" column="0">
+           <widget class="QLabel" name="income_amount_label">
+            <property name="text">
+             <string>Amount</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="income_amount_line_edit"/>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="income_date_label">
+            <property name="text">
+             <string>Date</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QDateEdit" name="income_date_edit"/>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="income_tags_label">
+            <property name="text">
+             <string>Tags</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="income_description_label">
+            <property name="text">
+             <string>Description</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QPlainTextEdit" name="income_description_text_edit"/>
+          </item>
+          <item row="2" column="1">
+           <widget class="QComboBox" name="income_tags_combo_box"/>
+          </item>
+         </layout>
         </widget>
        </widget>
        <widget class="QWidget" name="dashboard_tab">
@@ -141,53 +185,97 @@ QTabWidget::tab-bar {alignment: center;}</string>
         <widget class="QTableWidget" name="expense_table">
          <property name="geometry">
           <rect>
-           <x>845</x>
+           <x>804</x>
            <y>20</y>
-           <width>330</width>
+           <width>371</width>
            <height>800</height>
           </rect>
+         </property>
+         <property name="sizeAdjustPolicy">
+          <enum>QAbstractScrollArea::AdjustToContents</enum>
          </property>
          <property name="editTriggers">
           <set>QAbstractItemView::NoEditTriggers</set>
          </property>
+         <column>
+          <property name="text">
+           <string>Amount</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Date</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Description</string>
+          </property>
+         </column>
         </widget>
-        <widget class="QLineEdit" name="expense_input">
+        <widget class="QWidget" name="formLayoutWidget_2">
          <property name="geometry">
           <rect>
-           <x>440</x>
+           <x>410</x>
            <y>20</y>
-           <width>113</width>
-           <height>25</height>
+           <width>371</width>
+           <height>211</height>
           </rect>
          </property>
-         <property name="placeholderText">
-          <string>Enter expense</string>
-         </property>
+         <layout class="QFormLayout" name="add_expense_form_layout">
+          <item row="0" column="0">
+           <widget class="QLabel" name="expense_amount_label">
+            <property name="text">
+             <string>Amount</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="expense_amount_line_edit"/>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="expense_date_label">
+            <property name="text">
+             <string>Date</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QDateEdit" name="expense_date_edit"/>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="expense_tag_label">
+            <property name="text">
+             <string>Tags</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="expense_description_label">
+            <property name="text">
+             <string>Description</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QPlainTextEdit" name="expense_description_text_edit"/>
+          </item>
+          <item row="2" column="1">
+           <widget class="QComboBox" name="expense_tag_combo_box"/>
+          </item>
+         </layout>
         </widget>
-        <widget class="QPushButton" name="add_expense_btn">
+        <widget class="QPushButton" name="add_expense_button">
          <property name="geometry">
           <rect>
-           <x>470</x>
-           <y>190</y>
-           <width>80</width>
-           <height>25</height>
+           <x>410</x>
+           <y>240</y>
+           <width>141</width>
+           <height>41</height>
           </rect>
          </property>
          <property name="text">
           <string>Add Expense</string>
-         </property>
-        </widget>
-        <widget class="QTextEdit" name="expense_desc">
-         <property name="geometry">
-          <rect>
-           <x>280</x>
-           <y>60</y>
-           <width>271</width>
-           <height>111</height>
-          </rect>
-         </property>
-         <property name="placeholderText">
-          <string>Add an optional description of the expense</string>
          </property>
         </widget>
        </widget>
