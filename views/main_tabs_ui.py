@@ -147,7 +147,7 @@ class Ui_main_tabs_window(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Flow"))
         item = self.income_table.horizontalHeaderItem(0)
         item.setText(_translate("MainWindow", "Amount"))
         item = self.income_table.horizontalHeaderItem(1)

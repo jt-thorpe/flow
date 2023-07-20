@@ -114,7 +114,7 @@ class Ui_login_main_window(object):
     def retranslateUi(self, login_main_window):
         _translate = QtCore.QCoreApplication.translate
         login_main_window.setWindowTitle(
-            _translate("login_main_window", "MainWindow"))
+            _translate("login_main_window", "Flow"))
         self.login_fail_message.setText(_translate(
             "login_main_window", "Login unsucessful: please try again"))
         self.email_input.setPlaceholderText(
