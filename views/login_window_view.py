@@ -1,3 +1,4 @@
+import sys
 from PyQt6.QtCore import pyqtSignal, pyqtSlot
 from PyQt6.QtWidgets import QMainWindow
 
@@ -23,15 +24,16 @@ class LoginWindowView(QMainWindow):
 
         # Connect signals to slots
         self._ui.login_button.clicked.connect(self.__send_login_req_signal)
-        self._ui.exit_button.clicked.connect(self.__send_exit_req_signal)
+        self._ui.exit_button.clicked.connect(self.exit_requested)
 
     def __send_login_req_signal(self):
         """Emit login_req_signal to controller."""
         self.login_req_signal.emit(True)
 
-    def __send_exit_req_signal(self):
-        """Emit exit_req_signal to controller."""
-        self.exit_req_signal.emit(True)
+    def exit_requested(self):
+        """Quit the app."""
+        sys.exit()
+        
 
     def get_login_info(self):
         """Return text from email and password inputs.

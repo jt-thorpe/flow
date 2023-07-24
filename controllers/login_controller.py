@@ -1,5 +1,3 @@
-import sys
-
 from PyQt6.QtCore import QObject, pyqtSignal, pyqtSlot
 
 
@@ -12,22 +10,26 @@ class LoginController(QObject):
     Attributes:
         authentication_request_signal (pyqtSignal): sent to model
         controller_auth_res_signal (pyqtSignal): sent to view
+        proceed_to_main_signal (pyqtSignal): sent to app
+
+    Functions:
+        handle_login_signal: handle login request from view
+        handle_authentication_signal: handle login result from model
     """
 
-    authentication_request_signal = pyqtSignal(tuple)  # sent to model
-    controller_auth_res_signal = pyqtSignal(bool)  # sent to view
-    proceed_to_main_signal = pyqtSignal(bool)  # sent to app
+    authentication_request_signal = pyqtSignal(tuple)
+    controller_auth_res_signal = pyqtSignal(bool)
+    proceed_to_main_signal = pyqtSignal(bool)
 
     def __init__(self, model, view):
         """Initialize LoginWindow controller."""
         super().__init__()
 
-        self._model = model  # the model object
-        self._view = view  # the login view object
+        self._model = model
+        self._view = view
 
         # Connect view signals to controller slots
-        self._view.login_req_signal.connect(self.handle_login_signal)  # login
-        self._view.exit_req_signal.connect(self.handle_exit_signal)  # exit
+        self._view.login_req_signal.connect(self.handle_login_signal)
 
         # connect controller signals to model slots
         self.authentication_request_signal.connect(
@@ -45,24 +47,6 @@ class LoginController(QObject):
     def handle_login_signal(self):
         """Handle login request from view."""
         login_request_details = self._view.get_login_info()
-        self.request_authentication(login_request_details)
-
-    @pyqtSlot(bool)
-    def handle_exit_signal(self):
-        """Handle exit request from view.
-
-        TODO:
-            - easier to sys.exit() here or in the view?
-            - probably the view... is middle man controller necessary for this?
-        """
-        sys.exit()
-
-    def request_authentication(self, login_request_details):
-        """Request authentication from model.
-
-        Args:
-            login_request_details (tuple): (email, password)
-        """
         self.authentication_request_signal.emit(login_request_details)
 
     @pyqtSlot(bool)
