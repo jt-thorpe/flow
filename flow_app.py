@@ -1,6 +1,6 @@
 import sys
 
-from PyQt6.QtCore import pyqtSlot
+from PyQt6.QtCore import pyqtSlot, QEvent
 from PyQt6.QtWidgets import QApplication
 
 import flow_app_resources  # nb: doesn't need accessing, just importing
@@ -22,30 +22,41 @@ class FlowApp(QApplication):
                                                 self.login_window_view)
         self.main_view_controller = None
 
-        # connect login sigal to app slot
+        # setup external connections
+        self.login_window_view.set_up_connections()
+        self.login_controller.set_up_connections()
+
+        # setup internal connections
         self.login_controller.proceed_to_main_signal.connect(
             self.switch_to_main_window)
+        self.login_window_view.exit_req_signal.connect(self.exit_login)
 
         # show login window
         self.login_window_view.show()
 
     @pyqtSlot(bool)
     def switch_to_main_window(self):
-        """Switch to the main window.
-
-        Switch to the main window after a successful login signal is received
-        from the login controller.
-        """
+        """Cleanup login window and switch to main window."""
+        self.login_window_view.clean_up_connections()
+        self.login_controller.clean_up_connections()
         self.login_window_view.close()
 
-        # Load the main window view and controller
-        self.main_app_view = MainAppView()
-        self.main_view_controller = MainViewController(self.flow_app_model,
-                                                       self.main_app_view)
-        self.main_app_view.show()
+        if not hasattr(self, "main_app_view"):
+            self.main_app_view = MainAppView()
+            self.main_view_controller = MainViewController(self.flow_app_model,
+                                                           self.main_app_view)
+            self.main_app_view.set_up_connections()
+            self.main_view_controller.set_up_connections()
+            self.main_app_view.notify_view_loaded()
+            self.main_app_view.show()        
 
-        # notify main view controller that main view has loaded
-        self.main_app_view.notify_view_loaded()
+    @pyqtSlot()
+    def exit_login(self):
+        """Cleanup login window and exit."""
+        self.login_window_view.clean_up_connections()
+        self.login_controller.clean_up_connections()  
+        self.login_window_view.close()
+        self.quit()
 
 
 if __name__ == '__main__':

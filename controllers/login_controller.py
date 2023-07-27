@@ -28,29 +28,36 @@ class LoginController(QObject):
         self._model = model
         self._view = view
 
-        # Connect view signals to controller slots
-        self._view.login_req_signal.connect(self.handle_login_signal)
-
-        # connect controller signals to model slots
+    def set_up_connections(self):
+        """Set up login_controller connections."""
+        self._view.login_req_signal.connect(
+            self._handle_login_signal)
         self.authentication_request_signal.connect(
             self._model.authenticate_user)
-
-        # connect model signals to controller slots
-        self._model.model_auth_signal.connect(
-            self.handle_authentication_signal)
-
-        # connect controller signals to view slots
         self.controller_auth_res_signal.connect(
             self._view.handle_login_result_signal)
+        self._model.model_auth_signal.connect(
+            self._handle_authentication_signal)
+        
+    def clean_up_connections(self):
+        """Clean up login_controller connections."""
+        self._view.login_req_signal.disconnect(
+            self._handle_login_signal)
+        self.authentication_request_signal.disconnect(
+            self._model.authenticate_user)
+        self.controller_auth_res_signal.disconnect(
+            self._view.handle_login_result_signal)
+        self._model.model_auth_signal.disconnect(
+            self._handle_authentication_signal)
 
     @pyqtSlot(bool)
-    def handle_login_signal(self):
+    def _handle_login_signal(self):
         """Handle login request from view."""
         login_request_details = self._view.get_login_info()
         self.authentication_request_signal.emit(login_request_details)
 
     @pyqtSlot(bool)
-    def handle_authentication_signal(self, login_result):
+    def _handle_authentication_signal(self, login_result):
         """Handle login result from model.
 
         Args:

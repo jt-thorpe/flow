@@ -11,9 +11,7 @@ class FlowModel(QObject):
     """Flow model.
 
     Handles authentication, database queries, and other data-related tasks.
-    Stores the authentication status of the user. Emits signals to the
-    controller and receives signals from the controller. Should never interact
-    with the view directly.
+    Stores the authentication status of the user.
 
     Attributes:
         model_auth_signal (pyqtSignal): sent to controller
@@ -36,6 +34,8 @@ class FlowModel(QObject):
             "income": [],
             "expenses": []
         }
+
+        print(f"NUMBER OF INSTANCES OF FlowModel: {self._id}")
 
     @property
     def engine(self):
@@ -166,3 +166,23 @@ class FlowModel(QObject):
 
         self.transactions_loaded_signal.emit(
             self._user_transactions)  # emit data to controller
+        
+    @pyqtSlot(dict)
+    def add_transaction(self, transaction):
+        """Add income to the database.
+
+        Args:
+            income_details (dict): the income details
+        """
+        self._counter += 1
+        print(f"ADD_TRANSACTION CALLED: {self._counter}")
+        with Session(self._engine) as session, session.begin():
+            # add income to database
+            add_income_query = transaction_table.insert().values(
+                user_id = self._user_email_id,
+                amount = transaction["amount"],
+                description = transaction["description"],
+                date = transaction["date"],
+                is_income = transaction["is_income"]
+            )
+            session.execute(add_income_query)
