@@ -70,6 +70,7 @@ class Ui_main_tabs_window(object):
         self.income_date_label.setObjectName("income_date_label")
         self.add_income_form_layout.setWidget(1, QtWidgets.QFormLayout.ItemRole.LabelRole, self.income_date_label)
         self.income_date_edit = QtWidgets.QDateEdit(parent=self.formLayoutWidget)
+        self.income_date_edit.setCalendarPopup(True)
         self.income_date_edit.setObjectName("income_date_edit")
         self.add_income_form_layout.setWidget(1, QtWidgets.QFormLayout.ItemRole.FieldRole, self.income_date_edit)
         self.income_tags_label = QtWidgets.QLabel(parent=self.formLayoutWidget)
@@ -120,6 +121,7 @@ class Ui_main_tabs_window(object):
         self.expense_date_label.setObjectName("expense_date_label")
         self.add_expense_form_layout.setWidget(1, QtWidgets.QFormLayout.ItemRole.LabelRole, self.expense_date_label)
         self.expense_date_edit = QtWidgets.QDateEdit(parent=self.formLayoutWidget_2)
+        self.expense_date_edit.setCalendarPopup(True)
         self.expense_date_edit.setObjectName("expense_date_edit")
         self.add_expense_form_layout.setWidget(1, QtWidgets.QFormLayout.ItemRole.FieldRole, self.expense_date_edit)
         self.expense_tag_label = QtWidgets.QLabel(parent=self.formLayoutWidget_2)
@@ -142,7 +144,7 @@ class Ui_main_tabs_window(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        self.tab_bar.setCurrentIndex(2)
+        self.tab_bar.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):

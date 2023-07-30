@@ -13,7 +13,7 @@ class MainViewController(QObject):
     """
     request_load_user_transactions_signal = pyqtSignal(bool)
     on_transaction_loaded_signal = pyqtSignal(dict)
-    request_add_income_signal = pyqtSignal(dict)
+    request_add_transaction_signal = pyqtSignal(dict)
 
     def __init__(self, model, view):
         """Initialize MainViewController.
@@ -32,12 +32,12 @@ class MainViewController(QObject):
         self._main_view.main_view_loaded_signal.connect(
             self.on_main_view_loaded)
         self._main_view.add_income_btn_clicked_signal.connect(
-            self.add_income_signal_received)
+            self.add_transaction_signal_received)
         
         # Connect controller signals to model slots
         self.request_load_user_transactions_signal.connect(
             self._model.load_user_transactions)
-        self.request_add_income_signal.connect(
+        self.request_add_transaction_signal.connect(
             self._model.add_transaction)
         
         # Connect model signals to controller slots
@@ -54,12 +54,12 @@ class MainViewController(QObject):
         self._main_view.main_view_loaded_signal.disconnect(
             self.on_main_view_loaded)
         self._main_view.add_income_btn_clicked_signal.disconnect(
-            self.add_income_signal_received)
+            self.add_transaction_signal_received)
         
         # Disconnect controller signals from model slots
         self.request_load_user_transactions_signal.disconnect(
             self._model.load_user_transactions)
-        self.request_add_income_signal.disconnect(
+        self.request_add_transaction_signal.disconnect(
             self._model.add_transaction)
         
         # Disconnect model signals from controller slots
@@ -96,7 +96,7 @@ class MainViewController(QObject):
         self.on_transaction_loaded_signal.emit(data)
 
     @pyqtSlot(dict)
-    def add_income_signal_received(self, new_income):
+    def add_transaction_signal_received(self, new_income):
         """Handle add income signal.
 
         When a signal from the view is received to add income, signals the
@@ -106,4 +106,4 @@ class MainViewController(QObject):
             data (dict): the income data
         """
         if new_income is not None:
-            self.request_add_income_signal.emit(new_income)
+            self.request_add_transaction_signal.emit(new_income)

@@ -35,8 +35,6 @@ class FlowModel(QObject):
             "expenses": []
         }
 
-        print(f"NUMBER OF INSTANCES OF FlowModel: {self._id}")
-
     @property
     def engine(self):
         """Return the database engine.
@@ -174,8 +172,6 @@ class FlowModel(QObject):
         Args:
             income_details (dict): the income details
         """
-        self._counter += 1
-        print(f"ADD_TRANSACTION CALLED: {self._counter}")
         with Session(self._engine) as session, session.begin():
             # add income to database
             add_income_query = transaction_table.insert().values(

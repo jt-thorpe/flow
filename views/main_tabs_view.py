@@ -1,5 +1,5 @@
-from PyQt6.QtCore import pyqtSignal, pyqtSlot, Qt
-from PyQt6.QtWidgets import QMainWindow, QTableWidgetItem
+from PyQt6.QtCore import pyqtSignal, pyqtSlot, Qt, QDateTime
+from PyQt6.QtWidgets import QMainWindow, QTableWidgetItem, QMessageBox
 
 from views.main_tabs_ui import Ui_main_tabs_window
 
@@ -16,14 +16,19 @@ class MainAppView(QMainWindow):
         self._ui = Ui_main_tabs_window()
         self._ui.setupUi(self)
         self._ui.tab_bar.setCurrentIndex(1)  # set to dashboard tab
+        self._ui.income_date_edit.setDateTime(QDateTime.currentDateTime().toPyDateTime())
+        self._ui.expense_date_edit.setDateTime(QDateTime.currentDateTime().toPyDateTime())
 
     def set_up_connections(self):
         """Set up connections."""
-        self._ui.add_income_btn.clicked.connect(self.add_income_btn_clicked)
+        # TODO: standardise button names
+        self._ui.add_income_btn.clicked.connect(self.add_income_or_expense_btn_clicked)
+        self._ui.add_expense_button.clicked.connect(self.add_income_or_expense_btn_clicked)
 
     def clean_up_connections(self):
         """Clean up connections."""
-        self._ui.add_income_btn.clicked.disconnect(self.add_income_btn_clicked)
+        self._ui.add_income_btn.clicked.disconnect(self.add_income_or_expense_btn_clicked)
+        self._ui.add_expense_button.clicked.disconnect(self.add_income_or_expense_btn_clicked)
 
     def notify_view_loaded(self):
         """Emit main_view_loaded_signal to controller."""
@@ -36,6 +41,7 @@ class MainAppView(QMainWindow):
         Args:
             data (dict): the user's transactions
         """
+        # TODO: refactor this
         self._ui.income_table.setRowCount(len(data["income"]))
         self._ui.expense_table.setRowCount(len(data["expenses"]))
 
@@ -63,15 +69,58 @@ class MainAppView(QMainWindow):
             self._ui.expense_table.setItem(i, 2, item_description)
             i += 1
 
-    def add_income_btn_clicked(self):
-        """Handle add income button clicked signal."""
+    def get_new_transaction_type(self):
+        """Get the type of transaction to add.
 
-        # forget tags for now, not implemented
-        new_income = {
-            "amount": self._ui.income_amount_line_edit.text(),
-            "date": self._ui.income_date_edit.text(),
-            "description": self._ui.income_description_text_edit.toPlainText(),
-            "is_income": True,
-        }
-        self.add_income_btn_clicked_signal.emit(new_income)
-            
+        Returns:
+            bool: True if income, False if expense
+        """
+        if self._ui.tab_bar.currentIndex() == 0:
+            return True
+        if self._ui.tab_bar.currentIndex() == 2:
+            return False
+    
+    def add_income_or_expense_btn_clicked(self):
+        """Handle add income button clicked signal."""
+        # TODO: 
+        # - implement tags
+        # - refactor?
+        if self._ui.tab_bar.currentIndex() == 2:
+            amount = self._ui.expense_amount_line_edit.text()
+            if amount == "":
+                self.display_field_error()
+                return
+            new_expense = {
+                "amount": amount,
+                "date": self._ui.expense_date_edit.date().toString(Qt.DateFormat.ISODate),
+                "description": self._ui.expense_description_text_edit.toPlainText(),
+                "is_income": False,
+            }
+            self.add_income_btn_clicked_signal.emit(new_expense)
+            self._ui.expense_amount_line_edit.clear()
+            self._ui.expense_description_text_edit.clear()
+        else: # can only be income tab
+            amount = self._ui.income_amount_line_edit.text()
+            if amount == "":
+                self.display_field_error()
+                return
+            new_income = {
+                "amount": amount,
+                "date": self._ui.income_date_edit.date().toString(Qt.DateFormat.ISODate),
+                "description": self._ui.income_description_text_edit.toPlainText(),
+                "is_income": True,
+            }
+            self.add_income_btn_clicked_signal.emit(new_income)
+            self._ui.income_amount_line_edit.clear()
+            self._ui.income_description_text_edit.clear()
+
+    def display_field_error(self):
+        """Display an error message for a missing field."""
+        message_box = QMessageBox()
+        message_box.setWindowTitle("Missing Field")
+        message_box.setText("Please enter an amount.")
+        message_box.exec()
+        if self._ui.tab_bar.currentIndex() == 0:
+            self._ui.income_amount_line_edit.setFocus()
+        else:
+            self._ui.expense_amount_line_edit.setFocus()
