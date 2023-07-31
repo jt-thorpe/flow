@@ -38,7 +38,7 @@ class MainViewController(QObject):
         self.request_load_user_transactions_signal.connect(
             self._model.load_user_transactions)
         self.request_add_transaction_signal.connect(
-            self._model.add_transaction)
+            self._model.add_transaction_to_db)
         
         # Connect model signals to controller slots
         self._model.transactions_loaded_signal.connect(

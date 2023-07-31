@@ -27,9 +27,8 @@ class FlowModel(QObject):
         self._engine = create_engine(
             "postgresql://flow_db_master:1pdSftvvtiP0GVQ4eytmMWQL4d0JpFHU@dpg-ci1gki67avjfjanekg50-a.frankfurt-postgres.render.com/flow_test_db_jz1j", echo=True)
 
-        self._user_email_id = None
         self._is_authenticated = False
-
+        self._user_email_id = None
         self._user_transactions = {
             "income": [],
             "expenses": []
@@ -156,6 +155,7 @@ class FlowModel(QObject):
             expenses_query_res = session.execute(get_expenses_query).all()
 
         self._user_transactions["income"] = income_query_res
+        print(self._user_transactions["income"])
         self._user_transactions["expenses"] = expenses_query_res
 
         # if both None, no need to emit signal
@@ -166,19 +166,35 @@ class FlowModel(QObject):
             self._user_transactions)  # emit data to controller
         
     @pyqtSlot(dict)
-    def add_transaction(self, transaction):
-        """Add income to the database.
+    def add_transaction_to_db(self, transaction):
+        """Add a transaction to the database.
 
         Args:
-            income_details (dict): the income details
+            transaction (dict): the transaction details
         """
+        result = None
         with Session(self._engine) as session, session.begin():
-            # add income to database
-            add_income_query = transaction_table.insert().values(
+            add_transaction_query = transaction_table.insert().values(
                 user_id = self._user_email_id,
                 amount = transaction["amount"],
                 description = transaction["description"],
                 date = transaction["date"],
                 is_income = transaction["is_income"]
             )
-            session.execute(add_income_query)
+            result = session.execute(add_transaction_query)
+        self.add_transaction_to_model(result.last_inserted_params())
+
+    def add_transaction_to_model(self, transaction):
+        """Add a transaction to the model.
+
+        Used to add a transaction to the model after it has been added to the database,
+        so that the model is updated immediately and a new query does not need to be made
+        to update the model.
+
+        Args:
+            transaction (dict): the transaction details
+        """
+        if transaction["is_income"]:
+            self._user_transactions["income"].extend(transaction.values())
+        else:
+            self._user_transactions["expenses"].extend(transaction.values())
