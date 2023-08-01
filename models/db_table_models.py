@@ -33,7 +33,7 @@ transaction_table = Table(
     Column("user_id", UUID(as_uuid=True),
            ForeignKey("username.id"), primary_key=True, default=uuid.uuid4),
     Column("amount", Integer, nullable=False),
-    Column("description", VARCHAR(100)),
     Column("date", Date, server_default=text('NOW()'), nullable=False),
+    Column("description", VARCHAR(100)),
     Column("is_income", Boolean, nullable=False)  # True income, False expense
 )
