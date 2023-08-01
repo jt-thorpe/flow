@@ -15,6 +15,7 @@ class MainAppView(QMainWindow):
 
         self._ui = Ui_main_tabs_window()
         self._ui.setupUi(self)
+
         self._ui.tab_bar.setCurrentIndex(1)  # set to dashboard tab
         self._ui.income_date_edit.setDateTime(QDateTime.currentDateTime().toPyDateTime())
         self._ui.expense_date_edit.setDateTime(QDateTime.currentDateTime().toPyDateTime())
@@ -41,33 +42,8 @@ class MainAppView(QMainWindow):
         Args:
             data (dict): the user's transactions
         """
-        # TODO: refactor this
-        self._ui.income_table.setRowCount(len(data["income"]))
-        self._ui.expense_table.setRowCount(len(data["expenses"]))
-
-        i = 0
-        for item in data["income"]:
-            item_amount = QTableWidgetItem(str(item.amount))
-            item_amount.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
-            item_date = QTableWidgetItem(str(item.date))
-            item_date.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
-            item_description = QTableWidgetItem(item.description)
-            self._ui.income_table.setItem(i, 0, item_amount)
-            self._ui.income_table.setItem(i, 1, item_date)
-            self._ui.income_table.setItem(i, 2, item_description)
-            i += 1
-
-        i = 0
-        for item in data["expenses"]:
-            item_amount = QTableWidgetItem(str(item.amount))
-            item_amount.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
-            item_date = QTableWidgetItem(str(item.date))
-            item_date.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
-            item_description = QTableWidgetItem(item.description)
-            self._ui.expense_table.setItem(i, 0, item_amount)
-            self._ui.expense_table.setItem(i, 1, item_date)
-            self._ui.expense_table.setItem(i, 2, item_description)
-            i += 1
+        for item in data:
+            self.transaction_data.add_transaction(item)
 
     def get_new_transaction_type(self):
         """Get the type of transaction to add.
@@ -85,6 +61,7 @@ class MainAppView(QMainWindow):
         # TODO: 
         # - implement tags
         # - refactor?
+        
         if self._ui.tab_bar.currentIndex() == 2:
             amount = self._ui.expense_amount_line_edit.text()
             if amount == "":

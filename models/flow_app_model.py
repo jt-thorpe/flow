@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 
 from models.db_table_models import (password_table, transaction_table,
                                     user_table)
+from models.transaction_data import TransactionData
 
 
 class FlowModel(QObject):
@@ -18,7 +19,6 @@ class FlowModel(QObject):
     """
 
     model_auth_signal = pyqtSignal(bool)  # sent to controller
-    transactions_loaded_signal = pyqtSignal(dict)
 
     def __init__(self):
         """Initialize Flow model."""
@@ -29,10 +29,8 @@ class FlowModel(QObject):
 
         self._is_authenticated = False
         self._user_email_id = None
-        self._user_transactions = {
-            "income": [],
-            "expenses": []
-        }
+        self._income_transaction_data = TransactionData(is_income=True)
+        self._expense_transaction_data = TransactionData(is_income=False)
 
     @property
     def engine(self):
@@ -117,84 +115,68 @@ class FlowModel(QObject):
             self._is_authenticated = False
             self.model_auth_signal.emit(False)
 
-    def get_income(self):
-        """Return the user's income.
+    def get_all_transactions_from_db(self):
+        """Get all transactions from the database.
+
+        Return a list of RowMapping objects for each transaction which behaves
+        as a dict.
 
         Returns:
-            list: the user's income
-        """
-        return self._user_transactions["income"]
-
-    def get_expenses(self):
-        """Return the user's expenses.
-
-        Returns:
-            list: the user's expenses
-        """
-        return self._user_transactions["expenses"]
-
-    @pyqtSlot(bool)
-    def load_user_transactions(self):
-        """Return the user's transactions from the database.
-
-        Returns:
-            list: the user's transactions
+            list: all transactions from the database
         """
         with Session(self._engine) as session, session.begin():
             # get income and expenses from database
-            get_income_query = select(transaction_table).where(
-                transaction_table.c.user_id == self._user_email_id,
-                transaction_table.c.is_income == True
-            )
-            income_query_res = session.execute(get_income_query).all()
+            get_transactions = select(transaction_table).where(
+                transaction_table.c.user_id == self._user_email_id)
+            return session.execute(get_transactions).mappings().all()
 
-            get_expenses_query = select(transaction_table).where(
-                transaction_table.c.user_id == self._user_email_id,
-                transaction_table.c.is_income == False
-            )
-            expenses_query_res = session.execute(get_expenses_query).all()
 
-        self._user_transactions["income"] = income_query_res
-        print(self._user_transactions["income"])
-        self._user_transactions["expenses"] = expenses_query_res
+    @pyqtSlot(bool)
+    def initialise_user_transactions(self):
+        """Initialise the user's transactions.
 
-        # if both None, no need to emit signal
-        if income_query_res and expenses_query_res is None:
+        Populate both the income and expense transaction data models with the user's transactions
+        when the app first loads.
+
+        Args:
+            is_authenticated (bool): whether the user is authenticated
+
+        Returns:
+            None
+        """
+        db_transactions = self.get_all_transactions_from_db()
+        if db_transactions is None:
             return
 
-        self.transactions_loaded_signal.emit(
-            self._user_transactions)  # emit data to controller
-        
-    @pyqtSlot(dict)
+        for transaction in db_transactions:
+            if transaction["is_income"]:
+                self._income_transaction_data.add_transaction(transaction)
+            else:
+                self._expense_transaction_data.add_transaction(transaction)
+
     def add_transaction_to_db(self, transaction):
         """Add a transaction to the database.
 
+        As the database handles the primary key, we need to return the
+        transaction that was added to the database so that we can
+        add it to the transaction data models.
+        
         Args:
-            transaction (dict): the transaction details
+            transaction (dict): the transaction to add to the database
+        
+        Returns:
+            dict: the transaction that was added to the database
+                  containing the value of the primary key (id)
         """
         result = None
         with Session(self._engine) as session, session.begin():
             add_transaction_query = transaction_table.insert().values(
                 user_id = self._user_email_id,
                 amount = transaction["amount"],
-                description = transaction["description"],
                 date = transaction["date"],
+                description = transaction["description"],
                 is_income = transaction["is_income"]
             )
             result = session.execute(add_transaction_query)
-        self.add_transaction_to_model(result.last_inserted_params())
-
-    def add_transaction_to_model(self, transaction):
-        """Add a transaction to the model.
-
-        Used to add a transaction to the model after it has been added to the database,
-        so that the model is updated immediately and a new query does not need to be made
-        to update the model.
-
-        Args:
-            transaction (dict): the transaction details
-        """
-        if transaction["is_income"]:
-            self._user_transactions["income"].extend(transaction.values())
-        else:
-            self._user_transactions["expenses"].extend(transaction.values())
+        return result.last_inserted_params()
+        

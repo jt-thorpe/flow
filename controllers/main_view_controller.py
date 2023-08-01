@@ -26,6 +26,14 @@ class MainViewController(QObject):
 
         self._model = model
         self._main_view = view
+        self._main_view._ui.income_table.setModel(self._model._income_transaction_data)
+        self._main_view._ui.income_table.setColumnHidden(0, True)
+        self._main_view._ui.income_table.setColumnHidden(1, True)
+        self._main_view._ui.income_table.setColumnHidden(5, True)
+        self._main_view._ui.expense_table.setModel(self._model._expense_transaction_data)
+        self._main_view._ui.expense_table.setColumnHidden(0, True)
+        self._main_view._ui.expense_table.setColumnHidden(1, True)
+        self._main_view._ui.expense_table.setColumnHidden(5, True)
 
     def set_up_connections(self):
         # Connect view signals to controller slots
@@ -36,20 +44,15 @@ class MainViewController(QObject):
         
         # Connect controller signals to model slots
         self.request_load_user_transactions_signal.connect(
-            self._model.load_user_transactions)
+            self._model.initialise_user_transactions)
         self.request_add_transaction_signal.connect(
             self._model.add_transaction_to_db)
-        
-        # Connect model signals to controller slots
-        self._model.transactions_loaded_signal.connect(
-            self.on_transaction_loaded)
         
         # Connect controller signals to view slots
         self.on_transaction_loaded_signal.connect(
             self._main_view.display_transactions)
         
     def clean_up_connections(self):
-        """Clean up connections."""
         # Disconnect view signals from controller slots
         self._main_view.main_view_loaded_signal.disconnect(
             self.on_main_view_loaded)
@@ -60,11 +63,7 @@ class MainViewController(QObject):
         self.request_load_user_transactions_signal.disconnect(
             self._model.load_user_transactions)
         self.request_add_transaction_signal.disconnect(
-            self._model.add_transaction)
-        
-        # Disconnect model signals from controller slots
-        self._model.transactions_loaded_signal.disconnect(
-            self.on_transaction_loaded)
+            self._model.add_transaction_to_db)
         
         # Disconnect controller signals from view slots
         self.on_transaction_loaded_signal.disconnect(
@@ -84,26 +83,22 @@ class MainViewController(QObject):
             self.request_load_user_transactions_signal.emit(True)
 
     @pyqtSlot(dict)
-    def on_transaction_loaded(self, data):
-        """Handle transaction loaded signal.
-
-        When a signal from the model is received that the user's transactions
-        have been loaded, signals the view to display the transactions.
-
-        Args:
-            data (dict): the user's transactions
-        """
-        self.on_transaction_loaded_signal.emit(data)
-
-    @pyqtSlot(dict)
-    def add_transaction_signal_received(self, new_income):
+    def add_transaction_signal_received(self, new_transaction):
         """Handle add income signal.
 
-        When a signal from the view is received to add income, signals the
-        model to add the income to the database.
+        Calls the model to first add the transaction to the database,
+        then the model.
 
         Args:
             data (dict): the income data
         """
-        if new_income is not None:
-            self.request_add_transaction_signal.emit(new_income)
+        if new_transaction["is_income"]:
+            self._model._income_transaction_data.add_transaction(
+                self._model.add_transaction_to_db(new_transaction)
+                )
+        else:
+            self._model._expense_transaction_data.add_transaction(
+                self._model.add_transaction_to_db(new_transaction)
+                )
+        
+        
