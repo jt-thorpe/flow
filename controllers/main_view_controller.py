@@ -52,6 +52,10 @@ class MainViewController(QObject):
         self.on_transaction_loaded_signal.connect(
             self._main_view.display_transactions)
         
+        # Connect model signals to controller slots
+        self._model.load_pie_chart_signal.connect(
+            self._main_view._ui.pie_chart.update_data)
+        
     def clean_up_connections(self):
         # Disconnect view signals from controller slots
         self._main_view.main_view_loaded_signal.disconnect(

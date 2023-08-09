@@ -1,6 +1,9 @@
 import matplotlib.pyplot as plt
-from PyQt6.QtWidgets import QWidget, QVBoxLayout
+from math import fsum
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QApplication, QMainWindow
+from PyQt6.QtCore import QObject, pyqtSignal, pyqtSlot
 from matplotlib.backends.backend_qtagg import FigureCanvas
+import sys
 
 
 class SemiCirclePieChartWidget(QWidget):
@@ -12,14 +15,21 @@ class SemiCirclePieChartWidget(QWidget):
         self.figure, self.ax = plt.subplots()
         self.canvas = FigureCanvas(self.figure)
         self.layout.addWidget(self.canvas)
+        self.canvas.setFixedSize(300, 300)
 
+    @pyqtSlot(list)
     def update_data(self, data):
         self.ax.clear()
         labels = ['Income', 'Expense']
-        values = [sum(item[2] for item in data if item[5] == 'T'), 
-                  sum(item[2] for item in data if item[5] == 'F')]
-        self.ax.pie(values, labels=labels, autopct='%1.1f%%', startangle=90, counterclock=False)
-        self.ax.set_theta_direction(-1)  # Make the pie chart clockwise
-        self.ax.set_theta_offset(-90)  # Start the pie chart from the top
+        values = [fsum(item["amount"] for item in data if item["is_income"] == True),
+                  fsum(item["amount"] for item in data if item["is_income"] == False)]
+        print(values)
+        self.ax.pie(values,
+                    labels=labels,
+                    autopct='%1.1f%%',
+                    startangle=(-90),
+                    counterclock=False,
+                    )
         self.ax.set_aspect('equal')
         self.canvas.draw()
+

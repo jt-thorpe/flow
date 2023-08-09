@@ -19,6 +19,7 @@ class FlowModel(QObject):
     """
 
     model_auth_signal = pyqtSignal(bool)  # sent to controller
+    load_pie_chart_signal = pyqtSignal(list)  # sent to controller
 
     def __init__(self):
         """Initialize Flow model."""
@@ -130,7 +131,6 @@ class FlowModel(QObject):
                 transaction_table.c.user_id == self._user_email_id)
             return session.execute(get_transactions).mappings().all()
 
-
     @pyqtSlot(bool)
     def initialise_user_transactions(self):
         """Initialise the user's transactions.
@@ -153,6 +153,9 @@ class FlowModel(QObject):
                 self._income_transaction_data.add_transaction(transaction)
             else:
                 self._expense_transaction_data.add_transaction(transaction)
+        
+        # load data to pie chart
+        self.load_pie_chart_signal.emit(db_transactions)
 
     def add_transaction_to_db(self, transaction):
         """Add a transaction to the database.

@@ -1,7 +1,8 @@
-from PyQt6.QtCore import pyqtSignal, pyqtSlot, Qt, QDateTime
-from PyQt6.QtWidgets import QMainWindow, QTableWidgetItem, QMessageBox
+from PyQt6.QtCore import pyqtSignal, pyqtSlot, Qt, QDateTime, QRect
+from PyQt6.QtWidgets import QMainWindow, QMessageBox, QVBoxLayout
 
 from views.main_tabs_ui import Ui_main_tabs_window
+from views.semi_circle_pie_chart import SemiCirclePieChartWidget
 
 
 class MainAppView(QMainWindow):
@@ -15,10 +16,13 @@ class MainAppView(QMainWindow):
 
         self._ui = Ui_main_tabs_window()
         self._ui.setupUi(self)
-
         self._ui.tab_bar.setCurrentIndex(1)  # set to dashboard tab
         self._ui.income_date_edit.setDateTime(QDateTime.currentDateTime().toPyDateTime())
         self._ui.expense_date_edit.setDateTime(QDateTime.currentDateTime().toPyDateTime())
+
+        self._ui.pie_chart = SemiCirclePieChartWidget()
+        self._ui.pie_chart.setParent(self._ui.dashboard_tab)
+        self._ui.pie_chart.ax.set_facecolor('none')
 
     def set_up_connections(self):
         """Set up connections."""
@@ -44,6 +48,19 @@ class MainAppView(QMainWindow):
         """
         for item in data:
             self.transaction_data.add_transaction(item)
+
+        # transactions displayed in tables, now update pie chart
+        print(data)
+        self.load_pie_chart_data(data)
+
+    def load_pie_chart_data(self, data):
+        """Load the pie chart with data.
+
+        Args:
+            income (list): list of income transactions
+            expense (list): list of expense transactions
+        """
+        self._ui.pie_chart.update_data(data)
 
     def get_new_transaction_type(self):
         """Get the type of transaction to add.
