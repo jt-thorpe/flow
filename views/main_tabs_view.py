@@ -1,5 +1,5 @@
 from PyQt6.QtCore import pyqtSignal, pyqtSlot, Qt, QDateTime, QRect
-from PyQt6.QtWidgets import QMainWindow, QMessageBox, QVBoxLayout
+from PyQt6.QtWidgets import QMainWindow, QMessageBox, QVBoxLayout, QSizePolicy
 
 from views.main_tabs_ui import Ui_main_tabs_window
 from views.semi_circle_pie_chart import SemiCirclePieChartWidget
@@ -21,8 +21,11 @@ class MainAppView(QMainWindow):
         self._ui.expense_date_edit.setDateTime(QDateTime.currentDateTime().toPyDateTime())
 
         self._ui.pie_chart = SemiCirclePieChartWidget()
-        self._ui.pie_chart.setParent(self._ui.dashboard_tab)
-        self._ui.pie_chart.ax.set_facecolor('none')
+        self._ui.pie_chart.setParent(self._ui.pie_chart_frame)
+        self._ui.pie_chart.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+
+        self._ui.pie_chart_frame.setLayout(QVBoxLayout())
+        self._ui.pie_chart_frame.layout().addWidget(self._ui.pie_chart.canvas)
 
     def set_up_connections(self):
         """Set up connections."""

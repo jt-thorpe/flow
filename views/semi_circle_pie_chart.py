@@ -10,12 +10,8 @@ class SemiCirclePieChartWidget(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.layout = QVBoxLayout()
-        self.setLayout(self.layout)
         self.figure, self.ax = plt.subplots()
         self.canvas = FigureCanvas(self.figure)
-        self.layout.addWidget(self.canvas)
-        self.canvas.setFixedSize(300, 300)
 
     @pyqtSlot(list)
     def update_data(self, data):
