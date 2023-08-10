@@ -2,7 +2,7 @@ from PyQt6.QtCore import pyqtSignal, pyqtSlot, Qt, QDateTime
 from PyQt6.QtWidgets import QMainWindow, QMessageBox, QVBoxLayout, QSizePolicy
 
 from views.main_tabs_ui import Ui_main_tabs_window
-from views.pie_chart_widget import PieChartWidget
+from resources.widgets.pie_chart_widget import PieChartWidget
 
 
 class MainAppView(QMainWindow):
