@@ -1,12 +1,11 @@
 import matplotlib.pyplot as plt
 from math import fsum
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QApplication, QMainWindow
-from PyQt6.QtCore import QObject, pyqtSignal, pyqtSlot
+from PyQt6.QtWidgets import QWidget
+from PyQt6.QtCore import pyqtSlot
 from matplotlib.backends.backend_qtagg import FigureCanvas
-import sys
 
 
-class SemiCirclePieChartWidget(QWidget):
+class PieChartWidget(QWidget):
     def __init__(self):
         super().__init__()
 
@@ -19,7 +18,6 @@ class SemiCirclePieChartWidget(QWidget):
         labels = ['Income', 'Expense']
         values = [fsum(item["amount"] for item in data if item["is_income"] == True),
                   fsum(item["amount"] for item in data if item["is_income"] == False)]
-        print(values)
         self.ax.pie(values,
                     labels=labels,
                     autopct='%1.1f%%',
@@ -27,5 +25,6 @@ class SemiCirclePieChartWidget(QWidget):
                     counterclock=False,
                     )
         self.ax.set_aspect('equal')
+        self.figure.set_alpha(0.0)
+        self.figure.set_facecolor('none')
         self.canvas.draw()
-
