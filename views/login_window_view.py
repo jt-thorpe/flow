@@ -1,4 +1,3 @@
-import sys
 from PyQt6.QtCore import pyqtSignal, pyqtSlot
 from PyQt6.QtWidgets import QMainWindow
 
@@ -28,7 +27,7 @@ class LoginWindowView(QMainWindow):
             self._send_login_req_signal)
         self._ui.exit_button.clicked.connect(
             self.exit_requested)
-        
+
     def clean_up_connections(self):
         """Clean up login_view connections."""
         self._ui.login_button.clicked.disconnect(
@@ -43,7 +42,6 @@ class LoginWindowView(QMainWindow):
     def exit_requested(self):
         """Request exit from app."""
         self.exit_req_signal.emit(True)
-        
 
     def get_login_info(self):
         """Return text from email and password inputs.

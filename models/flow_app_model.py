@@ -153,7 +153,7 @@ class FlowModel(QObject):
                 self._income_transaction_data.add_transaction(transaction)
             else:
                 self._expense_transaction_data.add_transaction(transaction)
-        
+
         # load data to pie chart
         self.load_pie_chart_signal.emit(db_transactions)
 
@@ -163,10 +163,10 @@ class FlowModel(QObject):
         As the database handles the primary key, we need to return the
         transaction that was added to the database so that we can
         add it to the transaction data models.
-        
+
         Args:
             transaction (dict): the transaction to add to the database
-        
+
         Returns:
             dict: the transaction that was added to the database
                   containing the value of the primary key (id)
@@ -174,12 +174,11 @@ class FlowModel(QObject):
         result = None
         with Session(self._engine) as session, session.begin():
             add_transaction_query = transaction_table.insert().values(
-                user_id = self._user_email_id,
-                amount = transaction["amount"],
-                date = transaction["date"],
-                description = transaction["description"],
-                is_income = transaction["is_income"]
+                user_id=self._user_email_id,
+                amount=transaction["amount"],
+                date=transaction["date"],
+                description=transaction["description"],
+                is_income=transaction["is_income"]
             )
             result = session.execute(add_transaction_query)
         return result.last_inserted_params()
-        

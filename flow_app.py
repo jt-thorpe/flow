@@ -1,6 +1,6 @@
 import sys
 
-from PyQt6.QtCore import pyqtSlot, QEvent
+from PyQt6.QtCore import pyqtSlot
 from PyQt6.QtWidgets import QApplication
 
 import flow_app_resources  # nb: doesn't need accessing, just importing
@@ -9,11 +9,14 @@ from controllers.main_view_controller import MainViewController
 from models.flow_app_model import FlowModel
 from views.login_window_view import LoginWindowView
 from views.main_tabs_view import MainAppView
+import qdarktheme
 
 
 class FlowApp(QApplication):
     def __init__(self, sys_argv):
         super(FlowApp, self).__init__(sys_argv)
+
+        qdarktheme.setup_theme("auto")
 
         # Initialize the model, views, and controller
         self.flow_app_model = FlowModel()

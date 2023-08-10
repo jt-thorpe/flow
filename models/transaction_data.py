@@ -1,7 +1,8 @@
 from PyQt6.QtCore import QAbstractTableModel, Qt, QModelIndex
 
+
 class TransactionData(QAbstractTableModel):
-    def __init__(self, data = None, is_income = None):
+    def __init__(self, data=None, is_income=None):
         super().__init__()
         self._data = data or []
         self._filter_is_income = is_income
@@ -10,10 +11,10 @@ class TransactionData(QAbstractTableModel):
         """Return the number of rows in the model.
 
         Is an override of the QAbstractTableModel.rowCount() method.
-        
+
         Args:
             parent (QModelIndex): the parent model index
-            
+
         Returns:
             int: the number of rows in the model
         """
@@ -23,12 +24,12 @@ class TransactionData(QAbstractTableModel):
 
     def columnCount(self, parent):
         """Return the number of columns in the model.
-        
+
         Is an override of the QAbstractTableModel.columnCount() method.
-        
+
         Args:
             parent (QModelIndex): the parent model index
-            
+
         Returns:
             int: the number of columns in the model
         """
@@ -42,14 +43,15 @@ class TransactionData(QAbstractTableModel):
         Args:
             index (QModelIndex): the index of the item
             role (Qt.ItemDataRole): the role of the item    
-        
+
         Returns:
             object: the data stored under the given role for the item referred to by the index
         """
         if not index.isValid() or role != Qt.ItemDataRole.DisplayRole:
             return None
-        
-        filtered_data = [transaction for transaction in self._data if transaction["is_income"] == self._filter_is_income]
+
+        filtered_data = [
+            transaction for transaction in self._data if transaction["is_income"] == self._filter_is_income]
         row = index.row()
         if row < len(filtered_data):
             transaction = filtered_data[row]
@@ -67,7 +69,7 @@ class TransactionData(QAbstractTableModel):
             elif col == 5:
                 return transaction["is_income"]
         return None
-    
+
     def headerData(self, section, orientation, role):
         """Return the data for the given role and section in the header with the specified orientation.
 
@@ -92,6 +94,7 @@ class TransactionData(QAbstractTableModel):
 
     def add_transaction(self, transaction):
         if self._filter_is_income is None or transaction["is_income"] == self._filter_is_income:
-            self.beginInsertRows(QModelIndex(), len(self._data), len(self._data))
+            self.beginInsertRows(QModelIndex(), len(
+                self._data), len(self._data))
             self._data.append(transaction)
             self.endInsertRows()

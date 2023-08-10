@@ -38,7 +38,7 @@ class LoginController(QObject):
             self._view.handle_login_result_signal)
         self._model.model_auth_signal.connect(
             self._handle_authentication_signal)
-        
+
     def clean_up_connections(self):
         """Clean up login_controller connections."""
         self._view.login_req_signal.disconnect(

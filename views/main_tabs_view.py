@@ -1,8 +1,8 @@
-from PyQt6.QtCore import pyqtSignal, pyqtSlot, Qt, QDateTime, QRect
+from PyQt6.QtCore import pyqtSignal, pyqtSlot, Qt, QDateTime
 from PyQt6.QtWidgets import QMainWindow, QMessageBox, QVBoxLayout, QSizePolicy
 
 from views.main_tabs_ui import Ui_main_tabs_window
-from views.semi_circle_pie_chart import SemiCirclePieChartWidget
+from views.pie_chart_widget import PieChartWidget
 
 
 class MainAppView(QMainWindow):
@@ -17,12 +17,15 @@ class MainAppView(QMainWindow):
         self._ui = Ui_main_tabs_window()
         self._ui.setupUi(self)
         self._ui.tab_bar.setCurrentIndex(1)  # set to dashboard tab
-        self._ui.income_date_edit.setDateTime(QDateTime.currentDateTime().toPyDateTime())
-        self._ui.expense_date_edit.setDateTime(QDateTime.currentDateTime().toPyDateTime())
+        self._ui.income_date_edit.setDateTime(
+            QDateTime.currentDateTime().toPyDateTime())
+        self._ui.expense_date_edit.setDateTime(
+            QDateTime.currentDateTime().toPyDateTime())
 
-        self._ui.pie_chart = SemiCirclePieChartWidget()
+        self._ui.pie_chart = PieChartWidget()
         self._ui.pie_chart.setParent(self._ui.pie_chart_frame)
-        self._ui.pie_chart.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        self._ui.pie_chart.setSizePolicy(
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
         self._ui.pie_chart_frame.setLayout(QVBoxLayout())
         self._ui.pie_chart_frame.layout().addWidget(self._ui.pie_chart.canvas)
@@ -30,13 +33,17 @@ class MainAppView(QMainWindow):
     def set_up_connections(self):
         """Set up connections."""
         # TODO: standardise button names
-        self._ui.add_income_btn.clicked.connect(self.add_income_or_expense_btn_clicked)
-        self._ui.add_expense_button.clicked.connect(self.add_income_or_expense_btn_clicked)
+        self._ui.add_income_btn.clicked.connect(
+            self.add_income_or_expense_btn_clicked)
+        self._ui.add_expense_button.clicked.connect(
+            self.add_income_or_expense_btn_clicked)
 
     def clean_up_connections(self):
         """Clean up connections."""
-        self._ui.add_income_btn.clicked.disconnect(self.add_income_or_expense_btn_clicked)
-        self._ui.add_expense_button.clicked.disconnect(self.add_income_or_expense_btn_clicked)
+        self._ui.add_income_btn.clicked.disconnect(
+            self.add_income_or_expense_btn_clicked)
+        self._ui.add_expense_button.clicked.disconnect(
+            self.add_income_or_expense_btn_clicked)
 
     def notify_view_loaded(self):
         """Emit main_view_loaded_signal to controller."""
@@ -75,13 +82,13 @@ class MainAppView(QMainWindow):
             return True
         if self._ui.tab_bar.currentIndex() == 2:
             return False
-    
+
     def add_income_or_expense_btn_clicked(self):
         """Handle add income button clicked signal."""
-        # TODO: 
+        # TODO:
         # - implement tags
         # - refactor?
-        
+
         if self._ui.tab_bar.currentIndex() == 2:
             amount = self._ui.expense_amount_line_edit.text()
             if amount == "":
@@ -96,7 +103,7 @@ class MainAppView(QMainWindow):
             self.add_income_btn_clicked_signal.emit(new_expense)
             self._ui.expense_amount_line_edit.clear()
             self._ui.expense_description_text_edit.clear()
-        else: # can only be income tab
+        else:  # can only be income tab
             amount = self._ui.income_amount_line_edit.text()
             if amount == "":
                 self.display_field_error()
