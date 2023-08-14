@@ -1,5 +1,6 @@
 from PyQt6.QtCore import pyqtSignal, pyqtSlot, Qt, QDateTime
 from PyQt6.QtWidgets import QMainWindow, QMessageBox, QVBoxLayout, QSizePolicy
+from datetime import datetime
 
 from views.main_tabs_ui import Ui_main_tabs_window
 from resources.widgets.pie_chart_widget import PieChartWidget
@@ -21,6 +22,8 @@ class MainAppView(QMainWindow):
             QDateTime.currentDateTime().toPyDateTime())
         self._ui.expense_date_edit.setDateTime(
             QDateTime.currentDateTime().toPyDateTime())
+        
+        self._ui.income_date_edit.setDisplayFormat("dd/MM/yyyy")
 
         self._ui.pie_chart = PieChartWidget()
         self._ui.pie_chart.setParent(self._ui.pie_chart_frame)
@@ -95,7 +98,7 @@ class MainAppView(QMainWindow):
                 return
             new_expense = {
                 "amount": amount,
-                "date": self._ui.expense_date_edit.date().toString(Qt.DateFormat.ISODate),
+                "date": self._ui.expense_date_edit.date().toPyDate(),
                 "description": self._ui.expense_description_text_edit.toPlainText(),
                 "is_income": False,
             }
@@ -109,10 +112,11 @@ class MainAppView(QMainWindow):
                 return
             new_income = {
                 "amount": amount,
-                "date": self._ui.income_date_edit.date().toString(Qt.DateFormat.ISODate),
+                "date": self._ui.income_date_edit.date().toPyDate(),
                 "description": self._ui.income_description_text_edit.toPlainText(),
                 "is_income": True,
             }
+            print(type(new_income["date"]))
             self.add_income_btn_clicked_signal.emit(new_income)
             self._ui.income_amount_line_edit.clear()
             self._ui.income_description_text_edit.clear()

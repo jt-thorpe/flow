@@ -63,6 +63,7 @@ class TransactionData(QAbstractTableModel):
             elif col == 2:
                 return transaction["amount"]
             elif col == 3:
+                # DB format differs from UI format, so convert
                 return transaction["date"].strftime("%d/%m/%Y")
             elif col == 4:
                 return transaction["description"]
@@ -93,6 +94,11 @@ class TransactionData(QAbstractTableModel):
         return super().headerData(section, orientation, role)
 
     def add_transaction(self, transaction):
+        """Add a transaction to the model.
+
+        Args:
+            transaction (dict): the transaction to add to the model (not db).
+        """
         if self._filter_is_income is None or transaction["is_income"] == self._filter_is_income:
             self.beginInsertRows(QModelIndex(), len(
                 self._data), len(self._data))
