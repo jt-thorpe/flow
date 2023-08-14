@@ -63,7 +63,6 @@ class MainAppView(QMainWindow):
             self.transaction_data.add_transaction(item)
 
         # transactions displayed in tables, now update pie chart
-        print(data)
         self.load_pie_chart_data(data)
 
     def load_pie_chart_data(self, data):
@@ -116,10 +115,10 @@ class MainAppView(QMainWindow):
                 "description": self._ui.income_description_text_edit.toPlainText(),
                 "is_income": True,
             }
-            print(type(new_income["date"]))
             self.add_income_btn_clicked_signal.emit(new_income)
             self._ui.income_amount_line_edit.clear()
             self._ui.income_description_text_edit.clear()
+            self.update_total_labels()
 
     def display_field_error(self):
         """Display an error message for a missing field."""
@@ -132,6 +131,12 @@ class MainAppView(QMainWindow):
         else:
             self._ui.expense_amount_line_edit.setFocus()
 
-    def set_piechart_colour_theme(self, colour_theme):
-        # TODO: implement dynamic colour themes based on users system theme
-        pass
+    def update_total_labels(self):
+        """Update the total labels."""
+        self._ui.total_income_label.setText(
+            f"{self.transaction_data.total_income}")
+        self._ui.total_expense_label.setText(
+            f"{self.transaction_data.total_expense}")
+        self._ui.lts_label.setText(
+            f"{self.transaction_data.total_income} - {self.transaction_data.total_expense}"
+        )

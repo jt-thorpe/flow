@@ -281,7 +281,7 @@ QTabWidget::tab-bar {alignment: center;}</string>
               </font>
              </property>
              <property name="text">
-              <string>Bills</string>
+              <string>Expense</string>
              </property>
             </widget>
            </item>
