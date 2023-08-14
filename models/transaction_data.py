@@ -63,7 +63,7 @@ class TransactionData(QAbstractTableModel):
             elif col == 2:
                 return transaction["amount"]
             elif col == 3:
-                return transaction["date"]
+                return transaction["date"].strftime("%d/%m/%Y")
             elif col == 4:
                 return transaction["description"]
             elif col == 5:

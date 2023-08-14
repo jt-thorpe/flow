@@ -85,9 +85,8 @@ class MainAppView(QMainWindow):
 
     def add_income_or_expense_btn_clicked(self):
         """Handle add income button clicked signal."""
-        # TODO:
-        # - implement tags
-        # - refactor?
+        # TODO: implement tags
+        # TODO: refactor - this sucks
 
         if self._ui.tab_bar.currentIndex() == 2:
             amount = self._ui.expense_amount_line_edit.text()
