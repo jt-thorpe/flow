@@ -14,6 +14,11 @@ class PieChartWidget(QWidget):
 
     @pyqtSlot(list)
     def update_data(self, data):
+        """Update the data in the pie chart.
+
+        Args:
+            data (list): the user's transactions from the data model
+        """
         self.ax.clear()
         labels = ['Income', 'Expense']
         values = [fsum(item["amount"] for item in data if item["is_income"] == True),
@@ -24,6 +29,11 @@ class PieChartWidget(QWidget):
                     startangle=(-90),
                     counterclock=False,
                     )
+
+        # set the text color to white
+        for text in self.ax.texts:
+            text.set_color('white')
+
         self.ax.set_aspect('equal')
         self.figure.set_alpha(0.0)
         self.figure.set_facecolor('none')

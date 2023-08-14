@@ -128,3 +128,7 @@ class MainAppView(QMainWindow):
             self._ui.income_amount_line_edit.setFocus()
         else:
             self._ui.expense_amount_line_edit.setFocus()
+
+    def set_piechart_colour_theme(self, colour_theme):
+        # TODO: implement dynamic colour themes based on users system theme
+        pass
