@@ -104,6 +104,7 @@ class MainAppView(QMainWindow):
             self.add_income_btn_clicked_signal.emit(new_expense)
             self._ui.expense_amount_line_edit.clear()
             self._ui.expense_description_text_edit.clear()
+            self.update_total_labels()
         else:  # can only be income tab
             amount = self._ui.income_amount_line_edit.text()
             if amount == "":
@@ -131,12 +132,33 @@ class MainAppView(QMainWindow):
         else:
             self._ui.expense_amount_line_edit.setFocus()
 
+    @pyqtSlot(float, float)
+    def initialise_total_labels(self, income, expense):
+        """Initialise the total labels.
+        
+        Called when the view is loaded.
+        
+        Args:
+            income (float): total income
+            expense (float): total expense
+        """
+        self._ui.total_income.setText(f"{income:.2f}")
+        self._ui.total_expense.setText(f"{expense:.2f}")
+        self._ui.left_to_spend.setText(f"{income - expense:.2f}")
+
     def update_total_labels(self):
-        """Update the total labels."""
-        self._ui.total_income_label.setText(
-            f"{self.transaction_data.total_income}")
-        self._ui.total_expense_label.setText(
-            f"{self.transaction_data.total_expense}")
-        self._ui.lts_label.setText(
-            f"{self.transaction_data.total_income} - {self.transaction_data.total_expense}"
-        )
+        """Update the total labels.
+        
+        Called after a new transaction is added.
+        """
+        self._ui.total_income.setText(
+            f"{float(self._ui.total_income.text()):.2f}"
+            )
+        self._ui.total_expense.setText(
+            f"{float(self._ui.total_expense.text()):.2f}"
+            )
+        self._ui.left_to_spend.setText(
+            f"{float(self._ui.total_income.text()) - float(self._ui.total_expense.text()):.2f}"
+            )
+
+    

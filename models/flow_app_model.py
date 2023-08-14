@@ -20,6 +20,7 @@ class FlowModel(QObject):
 
     model_auth_signal = pyqtSignal(bool)  # sent to controller
     load_pie_chart_signal = pyqtSignal(list)  # sent to controller
+    update_labels_signal = pyqtSignal(float, float)  # sent to controller
 
     def __init__(self):
         """Initialize Flow model."""
@@ -31,7 +32,9 @@ class FlowModel(QObject):
         self._is_authenticated = False
         self._user_email_id = None
         self._income_transaction_data = TransactionData(is_income=True)
+        self._income_total = 0
         self._expense_transaction_data = TransactionData(is_income=False)
+        self._expense_total = 0
 
     @property
     def engine(self):
@@ -68,6 +71,24 @@ class FlowModel(QObject):
             list: the user's transactions
         """
         return self._user_transactions
+    
+    @property
+    def income_total(self):
+        """Return the user's total income.
+
+        Returns:
+            float: the user's total income
+        """
+        return self._income_total
+    
+    @property
+    def expense_total(self):
+        """Return the user's total expenses.
+
+        Returns:
+            float: the user's total expenses
+        """
+        return self._expense_total
 
     @pyqtSlot(tuple)
     def authenticate_user(self, login_request_details):
@@ -136,7 +157,7 @@ class FlowModel(QObject):
         """Initialise the user's transactions.
 
         Populate both the income and expense transaction data models with the user's transactions
-        when the app first loads.
+        when the app first loads. Provides an initial total for both income and expenses.
 
         Args:
             is_authenticated (bool): whether the user is authenticated
@@ -151,9 +172,13 @@ class FlowModel(QObject):
         for transaction in db_transactions:
             if transaction["is_income"]:
                 self._income_transaction_data.add_transaction(transaction)
+                self._income_total += float(transaction["amount"])
             else:
                 self._expense_transaction_data.add_transaction(transaction)
+                self._expense_total += float(transaction["amount"])
 
+        self.update_labels_signal.emit(self._income_total, self._expense_total)
+        
         # load data to pie chart
         self.load_pie_chart_signal.emit(db_transactions)
 
@@ -171,6 +196,8 @@ class FlowModel(QObject):
             dict: the transaction that was added to the database
                   containing the value of the primary key (id)
         """
+        self._income_total += float(transaction["amount"]) if transaction["is_income"] else 0
+        self._expense_total += float(transaction["amount"]) if not transaction["is_income"] else 0
         result = None
         with Session(self._engine) as session, session.begin():
             add_transaction_query = transaction_table.insert().values(
@@ -181,4 +208,5 @@ class FlowModel(QObject):
                 is_income=transaction["is_income"]
             )
             result = session.execute(add_transaction_query)
+        self.update_labels_signal.emit(self._income_total, self._expense_total)
         return result.last_inserted_params()

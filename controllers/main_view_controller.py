@@ -14,6 +14,7 @@ class MainViewController(QObject):
     request_load_user_transactions_signal = pyqtSignal(bool)
     on_transaction_loaded_signal = pyqtSignal(dict)
     request_add_transaction_signal = pyqtSignal(dict)
+    request_view_initialise_total_label_signal = pyqtSignal(float, float)
 
     def __init__(self, model, view):
         """Initialize MainViewController.
@@ -38,6 +39,10 @@ class MainViewController(QObject):
         self._main_view._ui.expense_table.setColumnHidden(5, True)
 
     def set_up_connections(self):
+        """Set up connections.
+        
+        Connects all signals and slots.
+        """
         # Connect view signals to controller slots
         self._main_view.main_view_loaded_signal.connect(
             self.on_main_view_loaded)
@@ -53,27 +58,43 @@ class MainViewController(QObject):
         # Connect controller signals to view slots
         self.on_transaction_loaded_signal.connect(
             self._main_view.display_transactions)
+        self.request_view_initialise_total_label_signal.connect(
+            self._main_view.initialise_total_labels)
 
         # Connect model signals to controller slots
         self._model.load_pie_chart_signal.connect(
             self._main_view._ui.pie_chart.update_data)
+        self._model.update_labels_signal.connect(
+            self.initialise_view_total_labels)
 
     def clean_up_connections(self):
-        # Disconnect view signals from controller slots
+        """Clean up connections.
+        
+        Disconnects all signals and slots.
+        """
+        # Disconnect view signals to controller slots
         self._main_view.main_view_loaded_signal.disconnect(
             self.on_main_view_loaded)
         self._main_view.add_income_btn_clicked_signal.disconnect(
             self.add_transaction_signal_received)
 
-        # Disconnect controller signals from model slots
+        # Disconnect controller signals to model slots
         self.request_load_user_transactions_signal.disconnect(
-            self._model.load_user_transactions)
+            self._model.initialise_user_transactions)
         self.request_add_transaction_signal.disconnect(
             self._model.add_transaction_to_db)
 
-        # Disconnect controller signals from view slots
+        # Disconnect controller signals to view slots
         self.on_transaction_loaded_signal.disconnect(
             self._main_view.display_transactions)
+        self.request_view_initialise_total_label_signal.disconnect(
+            self._main_view.initialise_total_labels)
+
+        # Disconnect model signals to controller slots
+        self._model.load_pie_chart_signal.disconnect(
+            self._main_view._ui.pie_chart.update_data)
+        self._model.update_labels_signal.disconnect(
+            self.initialise_view_total_labels)
 
     @pyqtSlot(bool)
     def on_main_view_loaded(self, loaded):
@@ -106,3 +127,14 @@ class MainViewController(QObject):
             self._model._expense_transaction_data.add_transaction(
                 self._model.add_transaction_to_db(new_transaction)
             )
+
+    @pyqtSlot(float, float)
+    def initialise_view_total_labels(self, income, expense):
+        """Update the total labels in the view.
+
+        Args:
+            income (float): the total income
+            expenses (float): the total expenses
+        """
+        self.request_view_initialise_total_label_signal.emit(income, expense)
+        
