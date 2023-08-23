@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from models.db_table_models import (password_table, transaction_table,
                                     user_table)
-from models.transaction_data import TransactionData
+from models.pyqt_table_model import PyQtTransactionModel
 
 
 class FlowModel(QObject):
@@ -31,9 +31,9 @@ class FlowModel(QObject):
 
         self._is_authenticated = False
         self._user_email_id = None
-        self._income_transaction_data = TransactionData(is_income=True)
+        self._income_transaction_data = PyQtTransactionModel(is_income=True)
         self._income_total = 0
-        self._expense_transaction_data = TransactionData(is_income=False)
+        self._expense_transaction_data = PyQtTransactionModel(is_income=False)
         self._expense_total = 0
 
     @property
