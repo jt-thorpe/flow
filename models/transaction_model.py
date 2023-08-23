@@ -1,7 +1,7 @@
 from PyQt6.QtCore import QAbstractTableModel, Qt, QModelIndex
 
 
-class TransactionData(QAbstractTableModel):
+class PyQtTransactionModel(QAbstractTableModel):
     def __init__(self, data=None, is_income=None):
         super().__init__()
         self._data = data or []
