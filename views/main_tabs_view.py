@@ -22,7 +22,7 @@ class MainAppView(QMainWindow):
             QDateTime.currentDateTime().toPyDateTime())
         self._ui.expense_date_edit.setDateTime(
             QDateTime.currentDateTime().toPyDateTime())
-        
+
         self._ui.income_date_edit.setDisplayFormat("dd/MM/yyyy")
 
         self._ui.pie_chart = PieChartWidget()
@@ -135,9 +135,9 @@ class MainAppView(QMainWindow):
     @pyqtSlot(float, float)
     def initialise_total_labels(self, income, expense):
         """Initialise the total labels.
-        
+
         Called when the view is loaded.
-        
+
         Args:
             income (float): total income
             expense (float): total expense
@@ -148,17 +148,15 @@ class MainAppView(QMainWindow):
 
     def update_total_labels(self):
         """Update the total labels.
-        
+
         Called after a new transaction is added.
         """
         self._ui.total_income.setText(
             f"{float(self._ui.total_income.text()):.2f}"
-            )
+        )
         self._ui.total_expense.setText(
             f"{float(self._ui.total_expense.text()):.2f}"
-            )
+        )
         self._ui.left_to_spend.setText(
             f"{float(self._ui.total_income.text()) - float(self._ui.total_expense.text()):.2f}"
-            )
-
-    
+        )

@@ -51,13 +51,13 @@ class FlowApp(QApplication):
             self.main_app_view.set_up_connections()
             self.main_view_controller.set_up_connections()
             self.main_app_view.notify_view_loaded()
-            self.main_app_view.show()        
+            self.main_app_view.show()
 
     @pyqtSlot()
     def exit_login(self):
         """Cleanup login window and exit."""
         self.login_window_view.clean_up_connections()
-        self.login_controller.clean_up_connections()  
+        self.login_controller.clean_up_connections()
         self.login_window_view.close()
         self.quit()
 
