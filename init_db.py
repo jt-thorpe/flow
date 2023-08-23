@@ -12,7 +12,7 @@ from sqlalchemy import create_engine, insert
 from sqlalchemy_utils import database_exists
 
 from models.db_table_models import (metadata_obj, password_table,
-                                    transaction_table, user_table)
+                                        income_table, expense_table, user_table)
 
 # create engine to connect to database
 engine = create_engine(
@@ -52,19 +52,17 @@ def init_db():
             password="292c79310884cedb2b80bd8696b05f58fff1e1b753b21404f45d1aea4958311c")
         conn.execute(test_pword)
 
-        test_income_transaction = insert(transaction_table).values(
+        test_income_transaction = insert(income_table).values(
             user_id=random_uuid,
             amount=1000,
-            description="Test income",
-            is_income=True)
+            description="Test income")
         conn.execute(test_income_transaction)
         conn.commit()
 
-        test_expense_transaction = insert(transaction_table).values(
+        test_expense_transaction = insert(expense_table).values(
             user_id=random_uuid,
-            amount=100,
-            description="Test expense",
-            is_income=False)
+            amount=500,
+            description="Test expense")
         conn.execute(test_expense_transaction)
         conn.commit()
     print("DONE.")
