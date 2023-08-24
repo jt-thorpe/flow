@@ -12,7 +12,7 @@ from sqlalchemy import create_engine, insert
 from sqlalchemy_utils import database_exists
 
 from models.db_table_models import (metadata_obj, password_table,
-                                        income_table, expense_table, user_table)
+                                    income_table, expense_table, user_table)
 
 # create engine to connect to database
 engine = create_engine(
