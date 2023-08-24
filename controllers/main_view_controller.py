@@ -1,5 +1,5 @@
 from PyQt6.QtCore import QObject, pyqtSignal, pyqtSlot
-from models.transaction_model import Expense, Transaction
+from models.transaction_model import Transaction
 
 
 class MainViewController(QObject):
