@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from math import fsum
+
 from PyQt6.QtWidgets import QWidget
 from PyQt6.QtCore import pyqtSlot
 from matplotlib.backends.backend_qtagg import FigureCanvas
@@ -8,21 +8,15 @@ from matplotlib.backends.backend_qtagg import FigureCanvas
 class PieChartWidget(QWidget):
     def __init__(self):
         super().__init__()
-
         self.figure, self.ax = plt.subplots()
         self.canvas = FigureCanvas(self.figure)
 
     @pyqtSlot(list)
-    def update_data(self, data):
-        """Update the data in the pie chart.
+    def update_data(self, income, expense):
 
-        Args:
-            data (list): the user's transactions from the data model
-        """
         self.ax.clear()
         labels = ['Income', 'Expense']
-        values = [fsum(item["amount"] for item in data if item["is_income"] == True),
-                  fsum(item["amount"] for item in data if item["is_income"] == False)]
+        values = [income, expense]
         self.ax.pie(values,
                     labels=labels,
                     autopct='%1.1f%%',
