@@ -34,8 +34,11 @@ class FlowApp(QApplication):
             self.switch_to_main_window)
         self.login_window_view.exit_req_signal.connect(self.exit_login)
 
-        # show login window
-        self.login_window_view.show()
+        # login with sys.argv if provided
+        if self.handle_sysargv():
+            return
+        else:
+            self.login_window_view.show()
 
     @pyqtSlot(bool)
     def switch_to_main_window(self):
@@ -60,6 +63,14 @@ class FlowApp(QApplication):
         self.login_controller.clean_up_connections()
         self.login_window_view.close()
         self.quit()
+
+    def handle_sysargv(self):
+        """Handle sys.argv."""
+        if len(sys.argv) == 3:
+            self.login_window_view._ui.email_input.setText(sys.argv[1])
+            self.login_window_view._ui.password_input.setText(sys.argv[2])
+            self.login_window_view._ui.login_button.click()
+            return True
 
 
 if __name__ == '__main__':
