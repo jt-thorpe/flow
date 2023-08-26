@@ -246,5 +246,6 @@ class FlowModel(QObject):
 
         transaction._id = result.last_inserted_params()["id"]
         transaction._user_id = result.last_inserted_params()["user_id"]
+        transaction._date = transaction.get_date().strftime("%d/%m/%Y")  # covnert to dd/mm/yyyy string for display
 
         return transaction

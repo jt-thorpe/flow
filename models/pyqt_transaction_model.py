@@ -51,7 +51,8 @@ class PyQtTransactionTableModel(QAbstractTableModel):
     def columnCount(self, parent=QModelIndex()):
         """Return the number of columns for the children of the given parent.
 
-        Is an override of the QAbstractTableModel.columnCount() method. Always returns 3.
+        Is an override of the QAbstractTableModel.columnCount() method. Always returns 3 as
+        only displays Amount, Date, and Description.
 
         Args:
             parent (QModelIndex): the parent index

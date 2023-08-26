@@ -96,9 +96,10 @@ class MainAppView(QMainWindow):
         new_income = Income(None,
                             None,
                             amount,
-                            self._ui.income_date_edit.date().toPyDate(),
+                            self._ui.income_date_edit.date().toPyDate(),  # yyyy-mm-dd here to match db
                             self._ui.income_description_text_edit.toPlainText()
                             )
+        print(new_income.get_date())
         self.add_income_btn_clicked_signal.emit(new_income)
         self._ui.income_amount_line_edit.clear()
         self._ui.income_description_text_edit.clear()
@@ -113,7 +114,7 @@ class MainAppView(QMainWindow):
         new_expense = Expense(None,
                               None,
                               amount,
-                              self._ui.expense_date_edit.date().toPyDate(),
+                              self._ui.expense_date_edit.date().toPyDate(),  # yyyy-mm-dd here to match db
                               self._ui.expense_description_text_edit.toPlainText()
                               )
         self.add_expense_btn_clicked_signal.emit(new_expense)
