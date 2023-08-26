@@ -13,6 +13,7 @@ Classes:
 
 from abc import ABC, abstractmethod
 from PyQt6.QtGui import QStandardItem
+from PyQt6.QtCore import Qt
 
 
 class Transaction(ABC):
