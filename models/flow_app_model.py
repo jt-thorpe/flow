@@ -45,7 +45,7 @@ class FlowModel(QObject):
         return self._engine
 
     @property
-    def user_email(self):
+    def user_email_id(self):
         """Return the user's email.
 
         Returns:
@@ -61,33 +61,6 @@ class FlowModel(QObject):
             bool: True if authenticated, False otherwise
         """
         return self._is_authenticated
-
-    @property
-    def user_transactions(self):
-        """Return the user's transactions.
-
-        Returns:
-            list: the user's transactions
-        """
-        return self._user_transactions
-
-    @property
-    def income_total(self):
-        """Return the user's total income.
-
-        Returns:
-            float: the user's total income
-        """
-        return self._income_total
-
-    @property
-    def expense_total(self):
-        """Return the user's total expenses.
-
-        Returns:
-            float: the user's total expenses
-        """
-        return self._expense_total
 
     @pyqtSlot(tuple)
     def authenticate_user(self, login_request_details):
