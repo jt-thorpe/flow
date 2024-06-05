@@ -11,12 +11,12 @@ import uuid
 from sqlalchemy import create_engine, insert
 from sqlalchemy_utils import database_exists
 
-from models.db_table_models import (metadata_obj, password_table,
-                                    income_table, expense_table, user_table)
+from models.db_table_models import (expense_table, income_table, metadata_obj,
+                                    password_table, user_table)
 
 # create engine to connect to database
 engine = create_engine(
-    "postgresql://flow_db_master:1pdSftvvtiP0GVQ4eytmMWQL4d0JpFHU@dpg-ci1gki67avjfjanekg50-a.frankfurt-postgres.render.com/flow_test_db_jz1j", echo=True)
+    "postgresql://flow_db_user:3n29Y1Rw8gyqy7mJGvIIz4Yz66LwXW23@dpg-cpg27l8l5elc738lp8a0-a.frankfurt-postgres.render.com/flow_db", echo=True)
 
 
 def init_db():
