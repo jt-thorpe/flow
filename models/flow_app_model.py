@@ -1,12 +1,11 @@
-from pyargon2 import hash
-from PyQt6.QtCore import QObject, pyqtSignal, pyqtSlot
-from sqlalchemy import create_engine, select
-from sqlalchemy.orm import Session
-
 from models.db_table_models import (expense_table, income_table,
                                     password_table, user_table)
 from models.pyqt_transaction_model import PyQtTransactionTableModel
 from models.transaction_model import Expense, Income, Transaction
+from pyargon2 import hash
+from PyQt6.QtCore import QObject, pyqtSignal, pyqtSlot
+from sqlalchemy import create_engine, select
+from sqlalchemy.orm import Session
 
 
 class FlowModel(QObject):
@@ -27,6 +26,10 @@ class FlowModel(QObject):
         """Initialize Flow model."""
         super().__init__()
 
+        # In reality, the database URL should not be exposed here
+        # but the URL is hardcoded here for simplicity, and there is no personal data in the db at all
+        # in addition, the account for database hosting is temporary and will be deleted
+        # basically there is no security risk here
         self._engine = create_engine(
             "postgresql://flow_db_user:3n29Y1Rw8gyqy7mJGvIIz4Yz66LwXW23@dpg-cpg27l8l5elc738lp8a0-a.frankfurt-postgres.render.com/flow_db", echo=True)
 
